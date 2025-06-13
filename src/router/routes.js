@@ -5,16 +5,16 @@ import SigePage from 'src/pages/Sigs/SigePage.vue'
 import HigsPage from 'pages/higs/HigsPage.vue'
 import MigsAndVigsPage from 'src/pages/MigsAndVigs/MigsAndVigsPage.vue'
 import PotentialTargetGenesPage from 'src/pages/PotentialTargetGenes/PotentialTargetGenesPage.vue'
+import AboutPage from 'src/pages/About/AboutPage.vue'
+import HelpPage from 'src/pages/Help/HelpPage.vue'
 
 const routes = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      // Home
       {
-        path: '',
-        name: 'home',
+        path: '/',
         component: HomePage,
         meta: {
           title: 'Home',
@@ -62,6 +62,28 @@ const routes = [
         component: PotentialTargetGenesPage,
         meta: {
           title: 'Potential Target Genes',
+          showMenu: true,
+        },
+      },
+
+      // Potential Target Genes page
+      {
+        path: 'about',
+        name: 'about',
+        component: AboutPage,
+        meta: {
+          title: 'About',
+          showMenu: true,
+        },
+      },
+
+      // Potential Target Genes page
+      {
+        path: 'help',
+        name: 'help',
+        component: HelpPage,
+        meta: {
+          title: 'Help',
           showMenu: true,
         },
       },

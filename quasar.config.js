@@ -43,7 +43,8 @@ export default defineConfig((ctx) => {
 
     devServer: {
       open: true,
-      port: 8088,
+      port: 8100,
+      allowedHosts: ['vscode.lumoxuan.cn'],
     },
 
     // ▼▼▼ 这里是关键修改 ▼▼▼
