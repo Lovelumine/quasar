@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= productName %></title>
+
+  <meta charset="utf-8">
+  <meta name="description" content="<%= productDescription %>">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="msapplication-tap-highlight" content="no">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width<% if (ctx.mode.cordova || ctx.mode.capacitor) { %>, viewport-fit=cover<% } %>">
+
+  <link rel="icon" type="image/png" sizes="128x128" href="icons/favicon-128x128.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
+  <link rel="icon" type="image/ico" href="favicon.ico">
+</head>
+<body>
+<!-- quasar:entry-point -->
+<!-- welcome -->
+<div class="row">
+  <div class="col-lg-12 col-md-12 col-sm-12">
+    <h3 style="margin-left: 20px;"><strong>Welcome to RNAi Pesticide Database!</strong></h3>
+    <hr style="color: rgba(0, 0, 0, 0.1);">
+    <!-- introduction -->
+  </div>
+</div> <!-- welcome -->
+<!-- divide the middle page -->
+<div class="row" style="margin-top: 10px;">
+  <!-- workflow -->
+  <div class="col-lg-8 col-md-8 col-sm-8">
+    <div style="margin:0 20px;">
+      <p style="text-align: justify; font-weight: bold">Objectives of the RNAi Pesticide Database
+        <br><br>
+
+        <!--     By combining ChIP-seq, RMBase v3.0 identifies four novel potential m6A readers including SRSF1, EIF4A3, FAM120A and FMR1. Importantly, RMBase v3.0 demonstrates an orphan snoRNA, SNORA38 mediate the formation of Ψs in rRNA and mRNA. Surprisingly, after exploring the expression profiles of RMPs in 16 tumors, RMBase v3.0 illustrates NOP2, NOP58 and FBL can promoter cell proliferation in RKO and HCT116, while MOCS3 inhibits it. RMBase v3.0 also identifies 38 SCNA-driver RMPs and 16 oncogene drivers. In addition, distribution features of histone modification around m6A sites suggested that four histone modifications, including H3K36me3, H3K79me2, H3K9ac and H3K4me3 may affect m6A in some way. <br><br> -->
+
+        <!-- Finally, RMBase v3.0 provides seven powerful web-based tools including modAnnotation, modMetagene, deepAnno, modFunction, modGeneTool, ConservedFunc and modHistoneTool for custom analysis of RNA modification data. -->
+        To establish the first comprehensive database dedicated to RNAi-based pesticides, systematically compiling all information on RNA pesticides leveraging RNAi mechanisms. This will address the current fragmentation of research data, create a structured knowledge repository, and serve as a training dataset for AI-driven tools to automate the design of highly efficient dsRNA sequences.To provide researchers with user-friendly data query and analysis tools, enabling rapid screening of high-efficacy lethal gene targets and facilitating the design of multi-target fusion RNA pesticides, thereby accelerating RNA pesticide development.
+        To collect field trial data on RNA pesticides, including stability, effective concentration, and other critical parameters, to support experimental validation and field application.
+        To visualize dsRNA secondary structures using RNAfold, offering spatial structural insights to guide the engineering and optimization of dsRNA molecules.
+        To develop novel strategies for pest resistance management by promoting the rational use of RNA pesticides, delaying the emergence of pest resistance, and ensuring sustainable agricultural production.
+        To build an open-access platform fostering data sharing and collaboration among research teams, driving innovation in RNAi technology for pest control.
+        To expand beyond agricultural pest management, with future applications in plant virus and pathogen management, supporting the broader implementation of RNAi technology across "macro-agricultural" scenarios.
+      </p>
+      <div class="modal fade" id="genomeSource" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+
+            </div><!--modal-header-->
+          </div><!--modal-content-->
+        </div><!--modal-dialog-->
+      </div> <!--modal fade-->        </div>
+    <br>
+    <div style="text-align: center; margin: 0 10px;">
+      <!-- <img src="pictures/workflow.png" style="width: 100%;"> -->
+      <img src="pictures/Figure.1.new.png" style="width: 100%;">
+    </div>
+  </div>
+  <!-- right: release and citation -->
+  <div class="col-lg-4 col-md-4 col-sm-4">
+    <!-- function model -->
+    <div class="row" style="margin: 0 0 10px 0;">
+      <!-- RNA modification -->
+      <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="index-my">
+          <a href="rnamodifications.php">
+            <span><b>SIGS</b></span><br>
+            <span>
+                     <img src="pictures/indexImgs/modnew.png" style="width: 85%; max-height: 125px; padding: 5px 0;">
+                   </span>
+          </a>
+        </div>
+      </div>
+      <!-- RNA Modifications of Genes   -->
+      <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="index-my">
+          <a href="modgene.php">
+            <span><b>HIGS</b></span><br>
+            <span>
+                     <img src="pictures/indexImgs/genescluster.png" style="width: 85%; max-height: 125px; padding: 10px 0;">
+                   </span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin: 0 0 10px 0;">
+      <!-- Mechanisms of RNA modifications -->
+      <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="index-my">
+          <a href="mechanism.php">
+            <span><b>MIGS</b></span><br>
+            <span>
+                  <img src="pictures/indexImgs/mechanismnew.png" style="width: 85%; max-height: 125px; padding: 10px 0;">
+                </span>
+          </a>
+        </div>
+      </div>
+      <!-- Functions of RNA Modifications -->
+      <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="index-my">
+          <a href="functions.php">
+            <span><b>VIGS</b></span><br>
+            <span>
+                     <img src="pictures/indexImgs/functionsnew.png" style="width: 75%; max-height: 125px; padding: 10px 0;">
+                   </span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="margin: 0 0 10px 0;">
+      <!-- regulatory roles of histone modifications on RNA modifications-->
+      <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="index-my">
+          <a href="genomicLevelReg.php">
+            <span><b>Potential target gene</b></span><br>
+            <span>
+                  <img src="pictures/tools/modhistone.png" style="width: 60%; max-height: 100px; padding: 10px 0;">
+                </span>
+          </a>
+        </div>
+      </div>
+      <!-- Functions of RMP -->
+    </div>
+
+  </div> <!--right-->
+</div> <!--row the middle page-->
+<!-- js files -->
+<!-- footer -->
+<hr style="margin-top: 70px; color:#6c6cad; ">
+<!-- copyright -->
+<div style="margin-top: 10px;">
+  <p class="text-center" style="margin-left: 30px;">
+    &copy; 2025, Zheng Lab.
+    <a href="http://ab.sysu.edu.cn/en" target="_blank">School of Agriculture and Biotechnology</a>,
+    <a href="http://www.sysu.edu.cn/2012/en/index.htm" target="_blank">Sun Yat-sen University</a>, China.<br>
+    <!-- <img src="./pictures/logo2.png" style="width: 1.2%;"> -->
+    Guangdong ICP 2025 -1
+  </p>
+</div>
+</body>
+</html>
