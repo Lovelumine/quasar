@@ -56,180 +56,62 @@
           :loading="loading"
           :pagination="pagination"
         >
-          <template #bodyCell="{ text, column, record }">
-            <template v-if="column.key === 'Species'">
-              <em>{{ text }}</em>
-            </template>
-            <template v-else-if="column.key === 'Structure of sup-tRNA'">
-              <el-image
-                style="width: 100px; height: 100px"
-                :src="text"
-                :preview-src-list="[text]"
-                fit="cover"
-              />
-            </template>
-            <template v-else-if="column.key === 'Codon for readthrough'">
-              <ElSpace>
-                <ElTag
-                  v-for="items in Array.isArray(record['Codon for readthrough'])
-                    ? record['Codon for readthrough']
-                    : record['Codon for readthrough'].split(';').map((str) => str.trim())"
-                  :key="items"
-                  :type="getTagType(items)"
-                >
-                  {{ items }}
-                </ElTag>
-              </ElSpace>
-            </template>
-            <template v-else-if="column.key === 'Noncanonical charged amino acids'">
-              <ElSpace>
-                <ElTag
-                  v-for="items in Array.isArray(record['Noncanonical charged amino acids'])
-                    ? record['Noncanonical charged amino acids']
-                    : record['Noncanonical charged amino acids']
-                        .split(';')
-                        .map((str) => str.trim())"
-                  :key="items"
-                  :type="getTagType(items)"
-                >
-                  {{ items }}
-                </ElTag>
-              </ElSpace>
-            </template>
-            <template v-else-if="column.key === 'Readthrough mechanism'">
-              <ElSpace>
-                <ElTag
-                  v-for="items in Array.isArray(record['Readthrough mechanism'])
-                    ? record['Readthrough mechanism']
-                    : record['Readthrough mechanism'].split(';').map((str) => str.trim())"
-                  :key="items"
-                  :type="getTagType(items)"
-                >
-                  {{ items }}
-                </ElTag>
-              </ElSpace>
-            </template>
-            <template v-else-if="column.key === 'PMID of references'">
-              <ElSpace>
-                <span
-                  v-for="(pmid, index) in getPmidList(record['PMID of references'])"
-                  :key="index"
-                >
-                  <a
-                    :href="'https://pubmed.ncbi.nlm.nih.gov/' + pmid.trim()"
-                    target="_blank"
-                    class="bracket-links"
-                    >{{ pmid.trim() }}</a
-                  >
-                  <span v-if="index < getPmidList(record['PMID of references']).length - 1"
-                    >,
-                  </span>
-                </span>
-              </ElSpace>
-            </template>
-            <template v-else>
-              <span>{{ text }}</span>
-            </template>
-          </template>
-
           <template #expandedRowRender="{ record }">
-            <div>
+            <div class="expanded-row">
               <p>
-                <b>Species:</b> <em>{{ record.Species }}</em>
+                <b>Plant Name:</b> <em>{{ record['Plant Name'] }}</em>
               </p>
-              <p><b>Species ID:</b> {{ record['Species ID'] }}</p>
-              <p><b>Tissue/Organelle of Origin:</b> {{ record['Tissue/Organelle of Origin'] }}</p>
-              <p><b>Anticodon before mutation:</b> {{ record['Anticodon before mutation'] }}</p>
-              <p><b>Anticodon after mutation:</b> {{ record['Anticodon after mutation'] }}</p>
+              <p><b>Plant Taxonomy ID:</b> {{ record['Plant Taxonomy ID'] }}</p>
+              <p><b>Transgenic Site:</b> {{ record['Transgenic  Site'] }}</p>
+              <p><b>Transformation Method:</b> {{ record['Transformation Method'] }}</p>
+              <p><b>Expression System:</b> {{ record['Expression System'] }}</p>
+              <p><b>Vector:</b> {{ record['Vector'] }}</p>
+              <p><b>Target Pest Name:</b> {{ record['Target Pest Name'] }}</p>
+              <p><b>Pest Taxonomy ID:</b> {{ record['Pest Taxonomy ID'] }}</p>
+              <p><b>Target Pest Order:</b> {{ record['Target Pest Order'] }}</p>
+              <p><b>Pest Developmental Stage:</b> {{ record['Pest Developmental Stage'] }}</p>
+              <p><b>RNA Length (nt):</b> {{ record['RNA Length (nt)'] }}</p>
               <p>
-                <b>Codon for readthrough:</b>
-                <ElSpace>
-                  <ElTag
-                    v-for="items in Array.isArray(record['Codon for readthrough'])
-                      ? record['Codon for readthrough']
-                      : record['Codon for readthrough'].split(';').map((str) => str.trim())"
-                    :key="items"
-                    :type="getTagType(items)"
-                  >
-                    {{ items }}
-                  </ElTag>
-                </ElSpace>
+                <b>RNA Sequence:</b> <code>{{ record['RNA Sequence'] }}</code>
               </p>
+              <p><b>DNA length (bp):</b> {{ record['DNA length（bp）'] }}</p>
               <p>
-                <b>Noncanonical charged amino acids:</b>
-                <ElSpace>
-                  <ElTag
-                    v-for="items in Array.isArray(record['Noncanonical charged amino acids'])
-                      ? record['Noncanonical charged amino acids']
-                      : record['Noncanonical charged amino acids']
-                          .split(';')
-                          .map((str) => str.trim())"
-                    :key="items"
-                    :type="getTagType(items)"
-                  >
-                    {{ items }}
-                  </ElTag>
-                </ElSpace>
+                <b>DNA Sequence:</b> <code>{{ record['DNA Sequence'] }}</code>
               </p>
+              <p><b>RNA Type:</b> {{ record['RNA Type'] }}</p>
+              <p><b>RNA Production Method:</b> {{ record['RNA Production Method'] }}</p>
+              <p><b>Target Gene Name:</b> {{ record['Target Gene Name'] }}</p>
+              <p><b>Gene Function:</b> {{ record['Gene Function'] }}</p>
+              <p><b>Gene ID:</b> {{ record['Gene ID'] }}</p>
               <p>
-                <b>tRNA sequence before mutation:</b> {{ record['tRNA sequence before mutation'] }}
+                <b>Mechanism of Pesticide / Biochemical Process:</b>
+                {{ record['Mechanism of Pesticide/Biochemical Process'] }}
               </p>
+              <p><b>Experimental Environment:</b> {{ record['Experimental Environment'] }}</p>
+              <p><b>Optimal Concentration:</b> {{ record['Optimal Concentration'] }}</p>
+              <p><b>LC50:</b> {{ record['LC50'] }}</p>
+              <p><b>Time to Onset:</b> {{ record['Time to Onset'] }}</p>
+              <p><b>Duration of Efficacy:</b> {{ record['Duration of Efficacy'] }}</p>
               <p>
-                <b>tRNA sequence after mutation:</b>
-                <span v-html="highlightMutation(record['tRNA sequence after mutation'])"></span>
+                <b>Stability:</b>
+                {{ record['Stability（Chemical Stability、Environmental Stability、Half-Life）'] }}
               </p>
-
-              <div>
-                <b>Structure of sup-tRNA:</b>
-                <img
-                  :src="`https://minio.lumoxuan.cn/ensure/picture/${record.pictureid}.png`"
-                  @click="showLightbox(record.pictureid)"
-                  style="width: 100px; cursor: pointer"
-                />
-              </div>
+              <p><b>Effect:</b> {{ record['Effect'] }}</p>
               <p>
-                <b>Readthrough mechanism:</b>
-                <ElSpace>
-                  <ElTag
-                    v-for="items in Array.isArray(record['Readthrough mechanism'])
-                      ? record['Readthrough mechanism']
-                      : record['Readthrough mechanism'].split(';').map((str) => str.trim())"
-                    :key="items"
-                    :type="getTagType(items)"
-                  >
-                    {{ items }}
-                  </ElTag>
-                </ElSpace>
+                <b>Efficiency:</b>
+                {{ record['Efficiency（Low：＜40%；Medium：40%-80%；High：＞80%）'] }}
               </p>
               <p>
-                <b>Mutational position of sup-tRNA:</b>
-                {{ record['Mutational position of sup-tRNA'] }}
+                <b>Safety Profile / Off-target Probability:</b>
+                {{ record['Safety Profile/Off-target Probability'] }}
               </p>
+              <p><b>Non-target Species:</b> {{ record['Non-target Species'] }}</p>
+              <p><b>Reference PMID:</b> {{ record['Reference PMID'] }}</p>
               <p>
-                <b>PMID of references:</b>
-                <span
-                  v-for="(pmid, index) in getPmidList(record['PMID of references'])"
-                  :key="index"
-                >
-                  <a
-                    :href="'https://pubmed.ncbi.nlm.nih.gov/' + pmid.trim()"
-                    target="_blank"
-                    class="tilt-hover"
-                    >{{ pmid.trim() }}</a
-                  >
-                  <span v-if="index < getPmidList(record['PMID of references']).length - 1"
-                    >,
-                  </span>
-                </span>
+                <b>Notes (Supplementary Information):</b>
+                {{ record['Notes（Supplementary Information）'] }}
               </p>
-              <p v-if="record.Notes">
-                <b>Notes:</b>
-                <img
-                  :src="`https://minio.lumoxuan.cn/ensure/picture/${record.Notes}.png`"
-                  @click="showLightbox(record.Notes)"
-                  style="width: 100px; cursor: pointer"
-                />
-              </p>
+              <p><b>Primer information:</b> {{ record['Primer information'] }}</p>
             </div>
           </template>
         </s-table>
@@ -247,7 +129,7 @@
 
 <script lang="tsx">
 import { defineComponent, ref, onMounted, computed } from 'vue'
-import { ElImage, ElSelect, ElOption } from 'element-plus'
+import { ElSelect, ElOption } from 'element-plus'
 import { useTableData } from '../../utils/useTableData.js'
 import VueEasyLightbox from 'vue-easy-lightbox'
 import { highlightMutation } from '../../utils/highlightMutation.js'
@@ -260,18 +142,8 @@ import { pagination } from '../../utils/table'
 type DataType = {
   [key: string]: string | string[]
   key: string
-  Species: string
-  'Anticodon before mutation': string
-  'Anticodon after mutation': string
-  'Codon for readthrough': string[]
-  'Noncanonical charged amino acids': string[]
-  tRNA_sequence_before_mutation: string
-  tRNA_sequence_after_mutation: string
-  'Structure of sup-tRNA': string
-  'Readthrough mechanism': string
-  'Mutational position of sup-tRNA': string
-  PMID: string
-  pictureid: string
+  'Plant Name': string
+  'Plant Taxonomy ID': string
 }
 
 import en from '@shene/table/dist/locale/en'
@@ -280,7 +152,7 @@ const locale = ref(en)
 export default defineComponent({
   name: 'NaturalSupTRNA',
   components: {
-    ElImage,
+    // ElImage,
     ElSelect,
     ElOption,
     VueEasyLightbox,
@@ -291,16 +163,13 @@ export default defineComponent({
       filteredDataSource: originalFilteredDataSource,
       searchColumn,
       loadData,
-    } = useTableData<DataType>(
-      'https://minio.lumoxuan.cn/ensure/Frameshift sup-tRNA.csv',
-      (data) => {
-        return processCSVData(data, [
-          'Codon for readthrough',
-          'Noncanonical charged amino acids',
-          'Readthrough mechanism',
-        ])
-      },
-    )
+    } = useTableData<DataType>('data/HIGS.csv', (data) => {
+      return processCSVData(data, [
+        'Codon for readthrough',
+        'Noncanonical charged amino acids',
+        'Readthrough mechanism',
+      ])
+    })
 
     const tableSize = ref('default')
     const loading = ref(false)

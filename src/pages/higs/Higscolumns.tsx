@@ -1,70 +1,273 @@
-import type { STableColumnsType } from '@shene/table';
-import { ref } from 'vue';
+import type { STableColumnsType } from '@shene/table'
+import { ref } from 'vue'
 
-export type DataType = { [key: string]: string };
+export type DataType = { [key: string]: string }
 
 export const allColumns: STableColumnsType<DataType> = [
-      { title: 'Species', dataIndex: 'Species', width: 180, ellipsis: true, key: 'Species', resizable: true, sorter: true },
-      { title: 'Species ID', dataIndex: 'Species ID', width: 280, ellipsis: true, key: 'Species ID', resizable: true, sorter: true },
-      { title: 'Anticodon before mutation', dataIndex: 'Anticodon before mutation', width: 180, ellipsis: true, key: 'Anticodon before mutation', resizable: true },
-      { title: 'Anticodon after mutation', dataIndex: 'Anticodon after mutation', width: 180, ellipsis: true, key: 'Anticodon after mutation', resizable: true },
-      {
-        title: 'Codon for readthrough', dataIndex: 'Codon for readthrough', width: 180, ellipsis: true, key: 'Codon for readthrough', resizable: true
-      },
-      {
-        title: 'Noncanonical charged amino acids', dataIndex: 'Noncanonical charged amino acids', width: 260, ellipsis: true, key: 'Noncanonical charged amino acids', resizable: true,
-        filter: {
-          type: 'multiple',
-          list: [
-            { text: 'Val', value: 'Val' },
-            { text: 'Gln', value: 'Gln' },
-            { text: 'Lys', value: 'Lys' },
-            { text: 'Pro', value: 'Pro' },
-            { text: 'Gly', value: 'Gly' },
-            { text: 'Thr', value: 'Thr' },
-          ],
-          onFilter: (value, record) => value.includes(record['Noncanonical charged amino acids']) || record['Noncanonical charged amino acids'].includes(value)
-        }
-      },
-      { title: 'tRNA sequence before mutation', dataIndex: 'tRNA sequence before mutation', width: 200, ellipsis: true, key: 'tRNA sequence before mutation', resizable: true },
-      { title: 'tRNA sequence after mutation', dataIndex: 'tRNA sequence after mutation', width: 200, ellipsis: true, key: 'tRNA sequence after mutation', resizable: true },
-      {
-        title: 'Readthrough mechanism', dataIndex: 'Readthrough mechanism', width: 260, ellipsis: true, key: 'Readthrough mechanism', resizable: true, filter: {
-          type: 'multiple',
-          list: [
-            { text: 'mutations in the anticodon', value: 'mutations in the anticodon' },
-            { text: 'tRNA hopping', value: 'tRNA hopping' },
-            { text: 'quadruple pairing', value: 'quadruple pairing' },
-            { text: 'mutations outside the anticodon', value: 'mutations outside the anticodon' },
-          ],
-    onFilter: (value, record) => {
-      const mechanism = record['Readthrough mechanism'];
-      return value.some(val => mechanism.includes(val));
-    }}
-      },
-      { title: 'Mutational position of sup-tRNA', dataIndex: 'Mutational position of sup-tRNA', width: 250, ellipsis: true, key: 'Mutational position of sup-tRNA', resizable: true },
-      { title: 'PMID of references', 
-  dataIndex: 'PMID of references', 
-  key: 'PMID of references', 
-  resizable: true,
-  width: 250, 
-  align: 'center',
-  ellipsis: true, 
-  customRender: ({ text, record }) => {
-    const reference = String(record['PMID of references']); // 确保 Reference 是字符串类型
-    return (
-        <div>
-            {reference.split('、').map((pmid, index, array) => (
-                <span key={pmid.trim()}>
-                    <a href={`https://pubmed.ncbi.nlm.nih.gov/${pmid.trim()}`} target="_blank" class="bracket-links">{pmid.trim()}</a>
-                    {index < array.length - 1 && '、'}
-                </span>
-            ))}
-        </div>
-    );
-}}
-];
+  {
+    title: 'Plant Name',
+    dataIndex: 'Plant Name',
+    key: 'Plant Name',
+    width: 200,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'Plant Taxonomy ID',
+    dataIndex: 'Plant Taxonomy ID',
+    key: 'Plant Taxonomy ID',
+    width: 250,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'Transgenic Site',
+    dataIndex: 'Transgenic  Site',
+    key: 'Transgenic  Site',
+    width: 250,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'Transformation Method',
+    dataIndex: 'Transformation Method',
+    key: 'Transformation Method',
+    width: 200,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'Expression System',
+    dataIndex: 'Expression System',
+    key: 'Expression System',
+    width: 250,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'Vector',
+    dataIndex: 'Vector',
+    key: 'Vector',
+    width: 200,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'Target Pest Name',
+    dataIndex: 'Target Pest Name',
+    key: 'Target Pest Name',
+    width: 180,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'Pest Taxonomy ID',
+    dataIndex: 'Pest Taxonomy ID',
+    key: 'Pest Taxonomy ID',
+    width: 180,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'Target Pest Order',
+    dataIndex: 'Target Pest Order',
+    key: 'Target Pest Order',
+    width: 160,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'Pest Developmental Stage',
+    dataIndex: 'Pest Developmental Stage',
+    key: 'Pest Developmental Stage',
+    width: 200,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'RNA Length (nt)',
+    dataIndex: 'RNA Length (nt)',
+    key: 'RNA Length (nt)',
+    width: 140,
+    ellipsis: false,
+    resizable: true,
+  },
+  {
+    title: 'RNA Sequence',
+    dataIndex: 'RNA Sequence',
+    key: 'RNA Sequence',
+    width: 250,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'DNA length（bp）',
+    dataIndex: 'DNA length（bp）',
+    key: 'DNA length（bp）',
+    width: 140,
+    ellipsis: false,
+    resizable: true,
+  },
+  {
+    title: 'DNA Sequence',
+    dataIndex: 'DNA Sequence',
+    key: 'DNA Sequence',
+    width: 250,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'RNA Type',
+    dataIndex: 'RNA Type',
+    key: 'RNA Type',
+    width: 120,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'RNA Production Method',
+    dataIndex: 'RNA Production Method',
+    key: 'RNA Production Method',
+    width: 200,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'Target Gene Name',
+    dataIndex: 'Target Gene Name',
+    key: 'Target Gene Name',
+    width: 180,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'Gene Function',
+    dataIndex: 'Gene Function',
+    key: 'Gene Function',
+    width: 200,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'Gene ID',
+    dataIndex: 'Gene ID',
+    key: 'Gene ID',
+    width: 120,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'Mechanism of Pesticide/Biochemical Process',
+    dataIndex: 'Mechanism of Pesticide/Biochemical Process',
+    key: 'Mechanism of Pesticide/Biochemical Process',
+    width: 250,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'Experimental Environment',
+    dataIndex: 'Experimental Environment',
+    key: 'Experimental Environment',
+    width: 200,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'Optimal Concentration',
+    dataIndex: 'Optimal Concentration',
+    key: 'Optimal Concentration',
+    width: 160,
+    ellipsis: true,
+    resizable: true,
+  },
+  { title: 'LC50', dataIndex: 'LC50', key: 'LC50', width: 100, ellipsis: false, resizable: true },
+  {
+    title: 'Time to Onset',
+    dataIndex: 'Time to Onset',
+    key: 'Time to Onset',
+    width: 140,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'Duration of Efficacy',
+    dataIndex: 'Duration of Efficacy',
+    key: 'Duration of Efficacy',
+    width: 160,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'Stability（Chemical Stability、Environmental Stability、Half-Life）',
+    dataIndex: 'Stability（Chemical Stability、Environmental Stability、Half-Life）',
+    key: 'Stability（Chemical Stability、Environmental Stability、Half-Life）',
+    width: 300,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'Effect',
+    dataIndex: 'Effect',
+    key: 'Effect',
+    width: 120,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'Efficiency（Low：＜40%；Medium：40%-80%；High：＞80%）',
+    dataIndex: 'Efficiency（Low：＜40%；Medium：40%-80%；High：＞80%）',
+    key: 'Efficiency（Low：＜40%；Medium：40%-80%；High：＞80%）',
+    width: 300,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'Safety Profile/Off-target Probability',
+    dataIndex: 'Safety Profile/Off-target Probability',
+    key: 'Safety Profile/Off-target Probability',
+    width: 260,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'Non-target Species',
+    dataIndex: 'Non-target Species',
+    key: 'Non-target Species',
+    width: 200,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'Reference PMID',
+    dataIndex: 'Reference PMID',
+    key: 'Reference PMID',
+    width: 150,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'Notes（Supplementary Information）',
+    dataIndex: 'Notes（Supplementary Information）',
+    key: 'Notes（Supplementary Information）',
+    width: 300,
+    ellipsis: true,
+    resizable: true,
+  },
+  {
+    title: 'Primer information',
+    dataIndex: 'Primer information',
+    key: 'Primer information',
+    width: 200,
+    ellipsis: true,
+    resizable: true,
+  },
+]
 
-
-export const selectedColumns = ref<string[]>(['Species', 'Codon for readthrough', 'Anticodon after mutation', 'Codon for readthrough', 'Noncanonical charged amino acids', 'Readthrough mechanism']);
-   
+export const selectedColumns = ref<string[]>([
+  'Plant Name',
+  'Transgenic  Site',
+  'Transformation Method',
+  'Expression System',
+  'Vector',
+  'Reference PMID',
+])
