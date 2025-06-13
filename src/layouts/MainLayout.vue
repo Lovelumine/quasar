@@ -1,34 +1,61 @@
 <!-- src/layouts/MainLayout.vue -->
 <template>
   <q-layout view="hHh Lpr lFf">
-    <!-- 可选：顶部导航栏 -->
+    <!-- Top toolbar -->
     <q-header elevated>
       <q-toolbar>
-        <q-toolbar-title>
-          RNA农药数据库
-        </q-toolbar-title>
+        <!-- Constant title -->
+        <q-toolbar-title> RNA Pesticide Database </q-toolbar-title>
 
-        <!-- 导航菜单 -->
-        <q-btn flat label="首页" to="/" exact />
-        <q-btn flat label="数据库" to="/database" exact />
-        <q-btn flat label="测试" to="/test" exact />
+        <!-- Dynamic nav menu -->
+        <div v-if="menuRoutes.length" class="row items-center">
+          <q-btn
+            v-for="r in menuRoutes"
+            :key="r.name"
+            flat
+            :label="r.meta.title || capitalize(r.name)"
+            :to="r.path"
+            exact
+          />
+        </div>
       </q-toolbar>
     </q-header>
 
-    <!-- 页面内容容器 -->
+    <!-- Main content area -->
     <q-page-container>
-      <!-- 这里是路由内容渲染的地方 -->
       <router-view />
     </q-page-container>
   </q-layout>
 </template>
 
-<script>
-import { defineComponent } from 'vue';
+<script setup>
+import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 
-export default defineComponent({
-  name: 'MainLayout'
-});
+// Grab the router instance
+const router = useRouter()
+
+// We assume your routes are structured under the top-level "/" route:
+const topRoute = router.options.routes.find((r) => r.path === '/')
+
+// Filter only those children you want in the menu:
+const menuRoutes = computed(() => {
+  if (!topRoute || !Array.isArray(topRoute.children)) return []
+  return topRoute.children.filter((r) => r.meta?.showMenu !== false)
+})
+
+// Simple helper to Capitalize fallback labels
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}
 </script>
 
-
+<style scoped>
+/* optional spacing */
+.q-toolbar-title {
+  min-width: 250px;
+}
+.q-toolbar .row {
+  gap: 8px;
+}
+</style>

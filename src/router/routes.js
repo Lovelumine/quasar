@@ -1,37 +1,82 @@
-import DatabasePage from 'pages/DatabasePage.vue'
+// src/router/routes.js
+
+import HomePage from 'src/pages/home/HomePage.vue'
+import SigePage from 'src/pages/Sigs/SigePage.vue'
+import HigsPage from 'pages/higs/HigsPage.vue'
+import MigsAndVigsPage from 'src/pages/MigsAndVigs/MigsAndVigsPage.vue'
+import PotentialTargetGenesPage from 'src/pages/PotentialTargetGenes/PotentialTargetGenesPage.vue'
 
 const routes = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      // 首页指向数据库页面
+      // Home
       {
         path: '',
         name: 'home',
-        component: DatabasePage,
+        component: HomePage,
+        meta: {
+          title: 'Home',
+          showMenu: true,
+        },
       },
 
-      // 数据库页面也可以有单独的路由
+      // SIGS page
       {
-        path: 'database',
-        name: 'database',
-        component: DatabasePage,
+        path: 'sigs',
+        name: 'sigs',
+        component: SigePage,
+        meta: {
+          title: 'SIGS',
+          showMenu: true,
+        },
       },
 
-      // 测试页面
+      // HIGS page
       {
-        path: 'test',
-        name: 'test',
-        component: () => import('pages/TestPage.vue'),
+        path: 'higs',
+        name: 'higs',
+        component: HigsPage,
+        meta: {
+          title: 'HIGS',
+          showMenu: true,
+        },
+      },
+
+      // MIGS & VIGS page
+      {
+        path: 'migs-and-vigs',
+        name: 'migs-and-vigs',
+        component: MigsAndVigsPage,
+        meta: {
+          title: 'MIGS & VIGS',
+          showMenu: true,
+        },
+      },
+
+      // Potential Target Genes page
+      {
+        path: 'potential-target-genes',
+        name: 'potential-target-genes',
+        component: PotentialTargetGenesPage,
+        meta: {
+          title: 'Potential Target Genes',
+          showMenu: true,
+        },
       },
     ],
   },
 
-  // 通配路由必须放在最后（捕获所有未匹配的路由）
+  // Catch-all 404
   {
     path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue'),
+    name: 'not-found',
+    component: () => import('src/components/ErrorNotFound.vue'),
+    meta: {
+      title: 'Page Not Found',
+      showMenu: false,
+    },
   },
 ]
 

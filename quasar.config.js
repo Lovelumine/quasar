@@ -17,7 +17,7 @@ export default defineConfig((ctx) => {
         node: 'node20',
       },
 
-      vueRouterMode: 'hash',
+      vueRouterMode: 'history', // available values: 'hash', 'history'
 
       vitePlugins: [
         [
