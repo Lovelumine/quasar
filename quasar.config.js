@@ -9,7 +9,14 @@ export default defineConfig((ctx) => {
 
     css: ['app.scss'],
 
-    extras: ['roboto-font', 'material-icons'],
+    extras: [
+      'roboto-font',
+      'material-icons',
+
+      'roboto-font', // optional, you are not bound to it
+      'material-icons', // optional, you are not bound to it
+      'mdi-v6',
+    ],
 
     build: {
       target: {

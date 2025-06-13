@@ -5,7 +5,9 @@
     <q-header elevated>
       <q-toolbar>
         <!-- Constant title -->
-        <q-toolbar-title> RNA Pesticide Database </q-toolbar-title>
+        <q-toolbar-title>
+          <q-avatar> <img src="/picture/logo.png" /> </q-avatar>RNA Pesticide Database
+        </q-toolbar-title>
 
         <!-- Dynamic nav menu -->
         <div v-if="menuRoutes.length" class="row items-center">
