@@ -1,6 +1,6 @@
 <template>
   <div class="site--main">
-    <h2>HIGS</h2>
+    <h2>VIGS</h2>
     <!-- 顶部行包含尺寸调整、搜索框和列选择 -->
     <div class="top-controls">
       <!-- 搜索框 -->
@@ -58,60 +58,52 @@
         >
           <template #expandedRowRender="{ record }">
             <div class="expanded-row">
-              <p>
-                <b>Plant Name:</b> <em>{{ record['Plant Name'] }}</em>
-              </p>
-              <p><b>Plant Taxonomy ID:</b> {{ record['Plant Taxonomy ID'] }}</p>
-              <p><b>Transgenic Site:</b> {{ record['Transgenic  Site'] }}</p>
-              <p><b>Transformation Method:</b> {{ record['Transformation Method'] }}</p>
-              <p><b>Expression System:</b> {{ record['Expression System'] }}</p>
-              <p><b>Vector:</b> {{ record['Vector'] }}</p>
-              <p><b>Target Pest Name:</b> {{ record['Target Pest Name'] }}</p>
-              <p><b>Pest Taxonomy ID:</b> {{ record['Pest Taxonomy ID'] }}</p>
-              <p><b>Target Pest Order:</b> {{ record['Target Pest Order'] }}</p>
-              <p><b>Pest Developmental Stage:</b> {{ record['Pest Developmental Stage'] }}</p>
-              <p><b>RNA Length (nt):</b> {{ record['RNA Length (nt)'] }}</p>
-              <p>
-                <b>RNA Sequence:</b> <code>{{ record['RNA Sequence'] }}</code>
-              </p>
-              <p><b>DNA length (bp):</b> {{ record['DNA length（bp）'] }}</p>
-              <p>
-                <b>DNA Sequence:</b> <code>{{ record['DNA Sequence'] }}</code>
-              </p>
-              <p><b>RNA Type:</b> {{ record['RNA Type'] }}</p>
-              <p><b>RNA Production Method:</b> {{ record['RNA Production Method'] }}</p>
-              <p><b>Target Gene Name:</b> {{ record['Target Gene Name'] }}</p>
-              <p><b>Gene Function:</b> {{ record['Gene Function'] }}</p>
-              <p><b>Gene ID:</b> {{ record['Gene ID'] }}</p>
-              <p>
-                <b>Mechanism of Pesticide / Biochemical Process:</b>
-                {{ record['Mechanism of Pesticide/Biochemical Process'] }}
-              </p>
-              <p><b>Experimental Environment:</b> {{ record['Experimental Environment'] }}</p>
-              <p><b>Optimal Concentration:</b> {{ record['Optimal Concentration'] }}</p>
-              <p><b>LC50:</b> {{ record['LC50'] }}</p>
-              <p><b>Time to Onset:</b> {{ record['Time to Onset'] }}</p>
-              <p><b>Duration of Efficacy:</b> {{ record['Duration of Efficacy'] }}</p>
-              <p>
-                <b>Stability:</b>
-                {{ record['Stability（Chemical Stability、Environmental Stability、Half-Life）'] }}
-              </p>
-              <p><b>Effect:</b> {{ record['Effect'] }}</p>
-              <p>
-                <b>Efficiency:</b>
-                {{ record['Efficiency（Low：＜40%；Medium：40%-80%；High：＞80%）'] }}
-              </p>
-              <p>
-                <b>Safety Profile / Off-target Probability:</b>
-                {{ record['Safety Profile/Off-target Probability'] }}
-              </p>
-              <p><b>Non-target Species:</b> {{ record['Non-target Species'] }}</p>
-              <p><b>Reference PMID:</b> {{ record['Reference PMID'] }}</p>
-              <p>
-                <b>Notes (Supplementary Information):</b>
-                {{ record['Notes（Supplementary Information）'] }}
-              </p>
-              <p><b>Primer information:</b> {{ record['Primer information'] }}</p>
+                <p><b>Virus:</b> {{ record['Virus'] }}</p>
+                <p><b>Virus Taxonomy ID:</b> {{ record['Virus Taxonomy ID'] }}</p>
+                <p><b>Virus Engineered Methods:</b> {{ record['Virus Engineered Methods'] }}</p>
+                <p><b>Target Pest:</b> {{ record['Target Pest'] }}</p>
+                <p><b>Pest Taxonomy ID:</b> {{ record['Pest Taxonomy ID'] }}</p>
+                <p><b>Target Pest Order:</b> {{ record['Target Pest Order'] }}</p>
+                <p><b>Pest Developmental Stage:</b> {{ record['Pest Developmental Stage'] }}</p>
+                <p><b>RNA Length (nt):</b> {{ record['RNA Length (nt)'] }}</p>
+                <p>
+                  <b>RNA Sequence:</b> <code>{{ record['RNA Sequence'] }}</code>
+                </p>
+                <p><b>DNA length (bp):</b> {{ record['DNA length（bp）'] }}</p>
+                <p>
+                  <b>DNA Sequence:</b> <code>{{ record['DNA Sequence'] }}</code>
+                </p>
+                <p><b>RNA Type:</b> {{ record['RNA Type'] }}</p>
+                <p><b>RNA Production Method:</b> {{ record['RNA Production Method'] }}</p>
+                <p><b>Target Gene Name:</b> {{ record['Target Gene Name'] }}</p>
+                <p><b>Gene Function:</b> {{ record['Gene Function'] }}</p>
+                <p><b>Gene ID:</b> {{ record['Gene ID'] }}</p>
+                <p>
+                  <b>Mechanism of Pesticide / Biochemical Process:</b>
+                  {{ record['Mechanism of Pesticide/Biochemical Process'] }}
+                </p>
+                <p><b>Delivery Material:</b> {{ record['Delivery Material'] }}</p>
+                <p><b>Experimental Plants:</b> {{ record['Experimental Plants'] }}</p>
+                <p><b>Experimental Environment:</b> {{ record['Experimental Environment'] }}</p>
+                <p><b>Optimal Concentration:</b> {{ record['Optimal Concentration'] }}</p>
+                <p><b>LC50:</b> {{ record['LC50'] }}</p>
+                <p><b>Time to Onset:</b> {{ record['Time to Onset'] }}</p>
+                <p><b>Duration of Efficacy:</b> {{ record['Duration of Efficacy'] }}</p>
+                <p>
+                  <b>Stability:</b>
+                  {{ record['Stability（Chemical Stability、Environmental Stability、Half-Life）'] }}
+                </p>
+                <p><b>Effect:</b> {{ record['Effect'] }}</p>
+                <p>
+                  <b>Efficiency（Low：＜40%；Medium：40%-80%；High：＞80%）:</b>
+                  {{ record['Efficiency（Low：＜40%；Medium：40%-80%；High：＞80%）'] }}
+                </p>
+                <p><b>Efficiency（Low：＜40%；Medium：40%-80%；High：＞80%）:</b>{{ record['Efficiency（Low：＜40%；Medium：40%-80%；High：＞80%）'] }}</p>
+                <p><b>Reference PMID:</b> {{ record['Reference PMID'] }}</p>
+                <p>
+                  <b>Notes (Supplementary Information):</b>
+                  {{ record['Notes（Supplementary Information）'] }}
+                </p>
             </div>
           </template>
         </s-table>
@@ -135,7 +127,7 @@ import VueEasyLightbox from 'vue-easy-lightbox'
 import { highlightMutation } from '../../utils/highlightMutation.js'
 import { getTagType } from '../../utils/tag.js'
 import { processCSVData } from '../../utils/processCSVData.js'
-import { allColumns, selectedColumns, DataType } from './Higscolumns.js'
+import { allColumns, selectedColumns, DataType } from './Vigscolumn.js'
 import { sortData } from '../../utils/sort.js'
 import { pagination } from '../../utils/table'
 
@@ -156,7 +148,7 @@ export default defineComponent({
       filteredDataSource: originalFilteredDataSource,
       searchColumn,
       loadData,
-    } = useTableData<DataType>('data/HIGS.csv', (data) => {
+    } = useTableData<DataType>('data/VIGS.csv', (data) => {
       return processCSVData(data, [
         'Codon for readthrough',
         'Noncanonical charged amino acids',

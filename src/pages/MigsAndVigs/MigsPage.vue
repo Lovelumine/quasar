@@ -1,6 +1,6 @@
 <template>
   <div class="site--main">
-    <h2>HIGS</h2>
+    <h2>MIGS</h2>
     <!-- 顶部行包含尺寸调整、搜索框和列选择 -->
     <div class="top-controls">
       <!-- 搜索框 -->
@@ -58,14 +58,12 @@
         >
           <template #expandedRowRender="{ record }">
             <div class="expanded-row">
-              <p>
-                <b>Plant Name:</b> <em>{{ record['Plant Name'] }}</em>
-              </p>
-              <p><b>Plant Taxonomy ID:</b> {{ record['Plant Taxonomy ID'] }}</p>
-              <p><b>Transgenic Site:</b> {{ record['Transgenic  Site'] }}</p>
-              <p><b>Transformation Method:</b> {{ record['Transformation Method'] }}</p>
-              <p><b>Expression System:</b> {{ record['Expression System'] }}</p>
+              <p><b>Microbial Name:</b> {{ record['Microbial Name'] }}</p>
+              <p><b>Microbe ID:</b> {{ record['Microbe ID'] }}</p>
+              <p><b>Microbe Category:</b> {{ record['Microbe Category'] }}</p>
+              <p><b>Microbe Engineered Methods:</b> {{ record['Microbe Engineered Methods'] }}</p>
               <p><b>Vector:</b> {{ record['Vector'] }}</p>
+              <p><b>Yield:</b> {{ record['Yield'] }}</p>
               <p><b>Target Pest Name:</b> {{ record['Target Pest Name'] }}</p>
               <p><b>Pest Taxonomy ID:</b> {{ record['Pest Taxonomy ID'] }}</p>
               <p><b>Target Pest Order:</b> {{ record['Target Pest Order'] }}</p>
@@ -87,6 +85,8 @@
                 <b>Mechanism of Pesticide / Biochemical Process:</b>
                 {{ record['Mechanism of Pesticide/Biochemical Process'] }}
               </p>
+              <p><b>Application methods:</b> {{ record['Application methods'] }}</p>
+              <p><b>Feeding Material:</b> {{ record['Feeding Material'] }}</p>
               <p><b>Experimental Environment:</b> {{ record['Experimental Environment'] }}</p>
               <p><b>Optimal Concentration:</b> {{ record['Optimal Concentration'] }}</p>
               <p><b>LC50:</b> {{ record['LC50'] }}</p>
@@ -101,17 +101,12 @@
                 <b>Efficiency:</b>
                 {{ record['Efficiency（Low：＜40%；Medium：40%-80%；High：＞80%）'] }}
               </p>
-              <p>
-                <b>Safety Profile / Off-target Probability:</b>
-                {{ record['Safety Profile/Off-target Probability'] }}
-              </p>
-              <p><b>Non-target Species:</b> {{ record['Non-target Species'] }}</p>
+              <p><b>Efficiency:</b>{{ record['Efficiency'] }}</p>
               <p><b>Reference PMID:</b> {{ record['Reference PMID'] }}</p>
               <p>
                 <b>Notes (Supplementary Information):</b>
                 {{ record['Notes（Supplementary Information）'] }}
               </p>
-              <p><b>Primer information:</b> {{ record['Primer information'] }}</p>
             </div>
           </template>
         </s-table>
@@ -135,7 +130,7 @@ import VueEasyLightbox from 'vue-easy-lightbox'
 import { highlightMutation } from '../../utils/highlightMutation.js'
 import { getTagType } from '../../utils/tag.js'
 import { processCSVData } from '../../utils/processCSVData.js'
-import { allColumns, selectedColumns, DataType } from './Higscolumns.js'
+import { allColumns, selectedColumns, DataType } from './Migscolumn.js'
 import { sortData } from '../../utils/sort.js'
 import { pagination } from '../../utils/table'
 
@@ -156,7 +151,7 @@ export default defineComponent({
       filteredDataSource: originalFilteredDataSource,
       searchColumn,
       loadData,
-    } = useTableData<DataType>('data/HIGS.csv', (data) => {
+    } = useTableData<DataType>('data/MIGS.csv', (data) => {
       return processCSVData(data, [
         'Codon for readthrough',
         'Noncanonical charged amino acids',

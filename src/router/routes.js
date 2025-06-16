@@ -3,7 +3,8 @@
 import HomePage from 'src/pages/home/HomePage.vue'
 import SigePage from 'src/pages/Sigs/SigePage.vue'
 import HigsPage from 'pages/higs/HigsPage.vue'
-import MigsAndVigsPage from 'src/pages/MigsAndVigs/MigsAndVigsPage.vue'
+import MigsPage from 'src/pages/MigsAndVigs/MigsPage.vue'
+import VigsPage from 'src/pages/MigsAndVigs/VigsPage.vue'
 import PotentialTargetGenesPage from 'src/pages/PotentialTargetGenes/PotentialTargetGenesPage.vue'
 import AboutPage from 'src/pages/About/AboutPage.vue'
 import HelpPage from 'src/pages/Help/HelpPage.vue'
@@ -44,16 +45,28 @@ const routes = [
         },
       },
 
-      // MIGS & VIGS page
+      // MIGS page
       {
-        path: 'migs-and-vigs',
-        name: 'migs-and-vigs',
-        component: MigsAndVigsPage,
+        path: 'migs',
+        name: 'migs',
+        component: MigsPage,
         meta: {
-          title: 'MIGS & VIGS',
+          title: 'MIGS',
           showMenu: true,
         },
       },
+
+      //VIGS Page
+      {
+        path: 'vigs',
+        name: 'vigs',
+        component: VigsPage,
+        meta: {
+          title: 'VIGS',
+          showMenu: true,
+        },
+      },
+
 
       // Potential Target Genes page
       {
