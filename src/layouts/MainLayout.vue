@@ -16,7 +16,7 @@
             :key="r.name"
             flat
             :label="r.meta.title || capitalize(r.name)"
-            :to="r.path"
+            :to="`/${r.path}`"
             exact
           />
         </div>

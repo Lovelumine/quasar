@@ -78,28 +78,106 @@
   <!-- 新增HIGS介绍卡片 -->
    <div class="container">
       <div class="q-pa-md row items-start q-gutter-md">
-        <q-card class="card">
-          <q-card-section section class="bg-primary text-white">
-            <div class="text-h5">HIGS</div>
+        <q-card class="card" flat bordered>
+          <q-card-section>
+              <div class="text-h4 q-ma-sm">HIGS</div>
+          <q-separator/>
           </q-card-section>
-        </q-card>
 
-        <q-separator />
+          <q-card-section horizontal>
+            <q-card-secion class="col-6 bg-green-1">
+              <div class="flex justify-center text-caption text-black">
+                待填充
+              </div>
+            </q-card-secion>
 
-        <q-card-section horizontal>
-          <
 
-          <q-card-section class="col-5 flex flex-center">
-          <q-img
-            class="rounded-borders"
-            src="https://cdn.quasar.dev/img/parallax2.jpg"
-          />
+            <q-card-section class="col-6 bg-grey-1">
+            <q-img
+              class="rounded-borders"
+              src="../../../public/picture/HIGS.png"
+            />
+            <div class="flex justify-center text-grey"><em>Figure1:HIGS application process </em></div>
+            </q-card-section>
           </q-card-section>
-        </q-card-section>
+      </q-card>
+    </div>
+   </div>
+
+<!-- 新增“Commercialization Case” -->
+    <div class="container">
+      <div class="q-pa-md row items-start q-gutter-md">
+        <q-card class="card" flat bordered>
+          <q-card-section>
+              <div class="text-h4 text-green q-ma-sm">Commercialization Case</div>
+          <q-separator/>
+          </q-card-section>
+
+          <q-card-section horizontal>
+            <q-card-secion class="col-6 bg-green-1">
+              <div class="flex justify-center text-caption text-black">
+                待填充
+              </div>
+            </q-card-secion>
 
 
-      </div>
+            <q-card-section class="col-6 bg-grey-1">
+            <q-img
+              class="rounded-borders"
+              src="../../../public/picture/HIGS.png"
+            />
+            <div class="flex justify-center text-grey"><em>Figure1:HIGS application process </em></div>
+            </q-card-section>
+          </q-card-section>
+      </q-card>
+    </div>
+   </div>
 
+<!-- 新增“Related Resources” 注意文献是SIGS的，之后得同步到SIGS再把该页面修改为HIGS的对应论文-->
+    <div class="container">
+      <div class="q-pa-md row items-start q-gutter-md">
+        <q-card class="card" flat bordered>
+          <q-card-section>
+              <div class="text-h4 text-green q-ma-sm">Related Resources</div>
+          <q-separator/>
+          </q-card-section>
+
+          <q-card-section horizontal>
+            <q-card class="col-6 rounded-border">
+              <div class="text-h5 text-green q-ma-xs">Latest Research</div>
+              <div class="flex justify-center text-caption text-black q-ma-sm">
+                待填充
+              </div>
+              <q-separator/>
+              <div class="flex justify-center text-caption text-black q-ma-sm">
+                待填充
+              </div>
+              <q-separator/>
+              <div class="flex justify-center text-caption text-black q-ma-sm">
+                待填充
+              </div>
+            </q-card>
+
+            <q-card class="col-6 items-stretch">
+              <div class="text-h5 text-green q-ma-xs">Classic Papers</div>
+              <div class="q-ma-sm">
+                <a href="https://pubmed.ncbi.nlm.nih.gov/27923542/" class="a text-body1 text-blue">
+                  Spray-Induced Gene Silencing: a Powerful Innovative Strategy for Crop Protection
+                </a>
+                <p class="text-body2 text-grey">Koch & Kogel(2014)-Trends in Biotechnology</p>
+              </div>
+              <q-separator/>
+              <div class="flex justify-center text-caption q-ma-sm">
+                待填充
+              </div>
+              <q-separator/>
+              <div class="flex justify-center text-caption q-ma-sm">
+                待填充
+              </div>
+            </q-card>
+          </q-card-section>
+      </q-card>
+    </div>
    </div>
 </template>
 
@@ -381,6 +459,7 @@ export default defineComponent({
 /* HIGS 介绍卡片 */
 .card{
   border-radius: 16px;
+  width: 100%;
   overflow: hidden;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0);
   background:white;
@@ -388,13 +467,18 @@ export default defineComponent({
 }
 
 .container{
-  max-width: 1000px;
+  max-width: 100%;
   width: 100%;
   margin: 0 auto;
 }
 
-.header{
-  text-align:left;
-  margin-bottom:40px;
+.a{
+  text-decoration : none;
+}
+
+.rounded-border {
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 </style>
