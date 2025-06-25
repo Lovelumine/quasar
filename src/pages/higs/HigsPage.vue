@@ -74,6 +74,33 @@
       />
     </div>
   </div>
+
+  <!-- 新增HIGS介绍卡片 -->
+   <div class="container">
+      <div class="q-pa-md row items-start q-gutter-md">
+        <q-card class="card">
+          <q-card-section section class="bg-primary text-white">
+            <div class="text-h5">HIGS</div>
+          </q-card-section>
+        </q-card>
+
+        <q-separator />
+
+        <q-card-section horizontal>
+          <
+
+          <q-card-section class="col-5 flex flex-center">
+          <q-img
+            class="rounded-borders"
+            src="https://cdn.quasar.dev/img/parallax2.jpg"
+          />
+          </q-card-section>
+        </q-card-section>
+
+
+      </div>
+
+   </div>
 </template>
 
 <script lang="tsx">
@@ -176,14 +203,52 @@ export default defineComponent({
       const groups = [
         {
           title: 'Transgenic Plant',
-          {}
+          keys:['Transgenic Plant','Plant Taxonomy ID','Transgenic Site','Transformation Method','Expression System Vector']
+        },
+        {
+          title:'Target Pest',
+          keys:['Target Pest','Pest Taxonomy ID','Target Pest Order','Pest Developmental Stage']
+        },
+        {
+          title:'dsRNA',
+          keys:['RNA Length (nt)','RNA Sequence','RNA Type','RNA Production Method']
+        },
+        {
+          title:'Target Gene',
+          keys:['Target Gene Name','Gene Type Gene ID','Gene Function/Role']
+        },
+        {
+          title:'RNAi Effect',
+          keys:['Time to Onset','Effect','Efficiency','Experimental Result']
+        },
+        {
+          title:'Other',
+          keys:['Reference PMID','Notes']
         }
       ]
-      const rows = Object.entries(record)
-        .map(([key, val]) => `<tr>
-          <td class="label">${key}:</td>
-          <td>${val != null ? val : ''}`)
-        .join('\n')
+      const Grouprows = groups.map(group =>{
+        const rows = group.keys
+          .filter(key => record[key] !== undefined)
+          .map(key =>
+            <tr>
+              <td class="label">${key}:</td>
+              <td>${record[key]}</td>
+            </tr>
+          )
+          .join('\n');
+
+          return rows ?
+          <div class="section">
+            <h2>${group.title}</h2>
+            <table>
+              <tbody>
+                ${rows}
+              </tbody>
+            </table>
+          </div>
+          :'';
+      }).join('\n');
+
       const html = `
         <!doctype html>
         <html><head>
@@ -201,11 +266,23 @@ export default defineComponent({
             border:1px solid #eee;
             vertical-align: top;
             }
-            .label{
-            font-weight:bold;
-            width:30%;
-            background-color:#f9f9f9;
-            }
+            .label {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+            width: 30%;
+          }
+          .section-A h2 { color: #e74c3c; border-color: #e74c3c; }
+          .section-B h2 { color: #3498db; border-color: #3498db; }
+          .section-C h2 { color: #2ecc71; border-color: #2ecc71; }
+          .section-D h2 { color: #f39c12; border-color: #f39c12; }
+          .section-E h2 { color: #9b59b6; border-color: #9b59b6; }
+          .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #7f8c8d;
+            font-size: 0.9em;
+          }
             .highlight{
             background-color:#fffacd;
             font-weight:bold;
@@ -217,7 +294,7 @@ export default defineComponent({
           <h1>Details: ${record['Virus'] || ''}</h1>
           <table>
             <tbody>
-
+            ${Grouprows}
             </tbody>
           <table>
         </body>
@@ -299,5 +376,25 @@ export default defineComponent({
      flex: 0 0 auto;
      width: 1000px;
   */
+}
+
+/* HIGS 介绍卡片 */
+.card{
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0);
+  background:white;
+  transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+
+.container{
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.header{
+  text-align:left;
+  margin-bottom:40px;
 }
 </style>

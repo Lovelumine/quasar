@@ -9,6 +9,8 @@ import PotentialTargetGenesPage from 'src/pages/PotentialTargetGenes/PotentialTa
 import AboutPage from 'src/pages/About/AboutPage.vue'
 import HelpPage from 'src/pages/Help/HelpPage.vue'
 
+import VigsDetail from 'src/pages/MigsAndVigs/VigsDetail.vue'
+
 const routes = [
   {
     path: '/',
@@ -66,7 +68,12 @@ const routes = [
           showMenu: true,
         },
       },
-
+      {
+        path: 'vigs/:key',
+        name: 'vigs-detail',
+        component: VigsDetail,
+        meta: { title: 'VIGS Detail', showMenu: false },
+      },
 
       // Potential Target Genes page
       {

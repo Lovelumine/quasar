@@ -89,6 +89,7 @@ import { processCSVData } from '../../utils/processCSVData.js'
 import { allColumns, selectedColumns, DataType } from './Vigscolumn.js'
 import { sortData } from '../../utils/sort.js'
 import { pagination } from '../../utils/table'
+import { useRouter } from 'vue-router'
 
 import en from '@shene/table/dist/locale/en'
 const locale = ref(en)
@@ -124,7 +125,7 @@ export default defineComponent({
     const lightboxKey = ref(0)
     // 记录当前哪些行展开
     const expandedRowKeys = ref<string[]>([])
-
+    const router = useRouter()
     // 点击图片打开 Lightbox
     const showLightbox = (pictureid: string) => {
       const imgUrl = `https://minio.lumoxuan.cn/ensure/picture/${pictureid}.png`
@@ -175,13 +176,8 @@ export default defineComponent({
     // 侦听 expandedRowKeys，只要用户点击 “+” 就会有值
     watch(expandedRowKeys, (keys) => {
       if (keys.length) {
-        // 找到对应的行数据
-        const record = originalFilteredDataSource.value.find((r) => r.key === keys[0])
-        if (record) {
-          console.log('watch expandedRowKeys, open detail for', record)
-          openDetailPage(record)
-        }
-        // 立刻收起
+        const key = keys[0]
+        router.push({ name: 'vigs-detail', params: { key } })
         expandedRowKeys.value = []
       }
     })
