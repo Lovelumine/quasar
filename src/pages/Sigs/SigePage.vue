@@ -58,49 +58,9 @@
         >
           <template #expandedRowRender="{ record }">
             <div class="expanded-row">
-              <p><b>Target Pest Name:</b> {{ record['Target Pest Name'] }}</p>
-              <p><b>Pest Taxonomy ID:</b> {{ record['Pest Taxonomy ID'] }}</p>
-              <p><b>Target Pest Order:</b> {{ record['Target Pest Order'] }}</p>
-              <p><b>Pest Developmental Stage:</b> {{ record['Pest Developmental Stage'] }}</p>
-              <p><b>RNA Length (nt):</b> {{ record['RNA Length (nt)'] }}</p>
-              <p>
-                <b>RNA Sequence:</b> <code>{{ record['RNA Sequence'] }}</code>
-              </p>
-              <p><b>DNA length (bp):</b> {{ record['DNA length（bp）'] }}</p>
-              <p>
-                <b>DNA Sequence:</b> <code>{{ record['DNA Sequence'] }}</code>
-              </p>
-              <p><b>RNA Type:</b> {{ record['RNA Type'] }}</p>
-              <p><b>RNA Production Method:</b> {{ record['RNA Production Method'] }}</p>
-              <p><b>Target Gene Name:</b> {{ record['Target Gene Name'] }}</p>
-              <p><b>Gene Function:</b> {{ record['Gene Function'] }}</p>
-              <p><b>Gene ID:</b> {{ record['Gene ID'] }}</p>
-              <p>
-                <b>Mechanism of Pesticide / Biochemical Process:</b>
-                {{ record['Mechanism of Pesticide/Biochemical Process'] }}
-              </p>
-              <p><b>Delivery Material:</b> {{ record['Delivery Material'] }}</p>
-              <p><b>Experimental Plants:</b> {{ record['Experimental Plants'] }}</p>
-              <p><b>Experimental Environment:</b> {{ record['Experimental Environment'] }}</p>
-              <p><b>Optimal Concentration:</b> {{ record['Optimal Concentration'] }}</p>
-              <p><b>LC50:</b> {{ record['LC50'] }}</p>
-              <p><b>Time to Onset:</b> {{ record['Time to Onset'] }}</p>
-              <p><b>Duration of Efficacy:</b> {{ record['Duration of Efficacy'] }}</p>
-              <p>
-                <b>Stability:</b>
-                {{ record['Stability（Chemical Stability、Environmental Stability、Half-Life）'] }}
-              </p>
-              <p><b>Effect:</b> {{ record['Effect'] }}</p>
-              <p>
-                <b>Efficiency:</b>
-                {{ record['Efficiency（Low：＜40%；Medium：40%-80%；High：＞80%）'] }}
-              </p>
-              <p><b>Efficiency:</b>{{ record['Efficiency'] }}</p>
-              <p><b>Reference PMID:</b> {{ record['Reference PMID'] }}</p>
-              <p>
-                <b>Notes (Supplementary Information):</b>
-                {{ record['Notes（Supplementary Information）'] }}
-              </p>
+              <el-button type="primary" size="small" @click="openDetailPage(record)">
+                Details
+              </el-button>
             </div>
           </template>
         </s-table>
@@ -118,11 +78,9 @@
 
 <script lang="tsx">
 import { defineComponent, ref, onMounted, computed } from 'vue'
-import { ElSelect, ElOption } from 'element-plus'
+import { ElSelect, ElOption, ElButton } from 'element-plus'
 import { useTableData } from '../../utils/useTableData.js'
 import VueEasyLightbox from 'vue-easy-lightbox'
-import { highlightMutation } from '../../utils/highlightMutation.js'
-import { getTagType } from '../../utils/tag.js'
 import { processCSVData } from '../../utils/processCSVData.js'
 import { allColumns, selectedColumns, DataType } from './Sigscolumns.js'
 import { sortData } from '../../utils/sort.js'
@@ -132,11 +90,11 @@ import en from '@shene/table/dist/locale/en'
 const locale = ref(en)
 
 export default defineComponent({
-  name: 'NaturalSupTRNA',
+  name: 'VIGS',
   components: {
-    // ElImage,
     ElSelect,
     ElOption,
+    ElButton,
     VueEasyLightbox,
   },
   setup() {
@@ -145,68 +103,32 @@ export default defineComponent({
       filteredDataSource: originalFilteredDataSource,
       searchColumn,
       loadData,
-    } = useTableData<DataType>('data/SIGS.csv', (data) => {
-      return processCSVData(data, [
+    } = useTableData<DataType>('data/SIGS.csv', (data) =>
+      processCSVData(data, [
         'Codon for readthrough',
         'Noncanonical charged amino acids',
         'Readthrough mechanism',
-      ])
-    })
+      ]),
+    )
 
     const tableSize = ref('default')
     const loading = ref(false)
-    const dataSource = ref<DataType[]>([])
     const sortedDataSource = ref<DataType[]>([])
-
-    onMounted(async () => {
-      await loadData()
-      dataSource.value = originalFilteredDataSource.value
-      sortedDataSource.value = originalFilteredDataSource.value
-    })
-
     const visible = ref(false)
     const lightboxImgs = ref<string[]>([])
     const lightboxKey = ref(0)
 
-    const showLightbox = (pictureid: string) => {
-      const imgUrl = `https://minio.lumoxuan.cn/ensure/picture/${pictureid}.png`
-      lightboxImgs.value = [imgUrl]
-      lightboxKey.value += 1 // 更新key以重新渲染组件
-      visible.value = true
-    }
-
-    const hideLightbox = () => {
-      visible.value = false
-    }
+    onMounted(async () => {
+      await loadData()
+      sortedDataSource.value = originalFilteredDataSource.value
+    })
 
     const displayedColumns = computed(() =>
-      allColumns.filter((column) => selectedColumns.value.includes(column.key as string)),
+      allColumns.filter((c) => selectedColumns.value.includes(c.key as string)),
     )
 
-    const getPmidList = (pmidString) => {
-      return String(pmidString).split('、')
-    }
-
-    const onSorterChange = (params: any) => {
-      let sorter: { field?: string; order?: 'ascend' | 'descend' } = {}
-      if (Array.isArray(params)) {
-        sorter = params[0]
-      } else {
-        sorter = params
-      }
-
-      loading.value = true
-      const timer = setTimeout(() => {
-        sortedDataSource.value = sortData(originalFilteredDataSource.value, sorter)
-        loading.value = false
-        clearTimeout(timer)
-      }, 300)
-    }
-
     const filteredDataSource = computed(() => {
-      if (!searchText.value) {
-        return sortedDataSource.value
-      }
+      if (!searchText.value) return sortedDataSource.value
       return sortedDataSource.value.filter((record) => {
         if (!searchColumn.value) {
           return Object.values(record).some((val) =>
@@ -219,6 +141,52 @@ export default defineComponent({
       })
     })
 
+    function onSorterChange(params: any) {
+      let sorter = Array.isArray(params) ? params[0] : params
+      loading.value = true
+      setTimeout(() => {
+        sortedDataSource.value = sortData(originalFilteredDataSource.value, sorter)
+        loading.value = false
+      }, 300)
+    }
+
+    function showLightbox(pictureid: string) {
+      const imgUrl = `https://minio.lumoxuan.cn/ensure/picture/${pictureid}.png`
+      lightboxImgs.value = [imgUrl]
+      lightboxKey.value += 1
+      visible.value = true
+    }
+    function hideLightbox() {
+      visible.value = false
+    }
+
+    // —— 新增：在新窗口展示完整 record —— //
+    function openDetailPage(record: DataType) {
+      const rows = Object.entries(record)
+        .map(([key, val]) => `<p><strong>${key}:</strong> ${val != null ? val : ''}</p>`)
+        .join('\n')
+      const html = `
+        <!doctype html>
+        <html><head>
+          <meta charset="utf-8">
+          <title>Record Details</title>
+          <style>
+            body { font-family: Arial, sans-serif; padding: 20px; }
+            p { margin: 6px 0; }
+            strong { color: #333; }
+          </style>
+        </head>
+        <body>
+          <h1>Details: ${record['Virus'] || ''}</h1>
+          ${rows}
+        </body>
+        </html>`
+      const blob = new Blob([html], { type: 'text/html' })
+      const url = URL.createObjectURL(blob)
+      window.open(url, '_blank')
+      setTimeout(() => URL.revokeObjectURL(url), 60_000)
+    }
+
     return {
       allColumns,
       displayedColumns,
@@ -228,17 +196,15 @@ export default defineComponent({
       searchColumn,
       locale,
       selectedColumns,
-      highlightMutation,
+      loading, // ← 新增这一行
       visible,
-      lightboxKey,
       lightboxImgs,
+      lightboxKey,
       showLightbox,
       hideLightbox,
-      getTagType, // 获取标签类型
       onSorterChange,
-      getPmidList, // 添加getPmidList方法
-      loading,
-      pagination, // 分页配置
+      pagination,
+      openDetailPage,
     }
   },
 })

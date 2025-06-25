@@ -58,64 +58,14 @@
           :show-sorter-tooltip="true"
           :size="tableSize"
           :expand-row-by-click="true"
+          v-model:expandedRowKeys="expandedRowKeys"
           @sorter-change="onSorterChange"
           :loading="loading"
           :pagination="pagination"
         >
-          <template #expandedRowRender="{ record }">
-            <div class="expanded-row">
-              <!--   <p><b>Virus:</b> {{ record['Virus'] }}</p>
-              <p><b>Virus Taxonomy ID:</b> {{ record['Virus Taxonomy ID'] }}</p>
-              <p><b>Virus Engineered Methods:</b> {{ record['Virus Engineered Methods'] }}</p>
-              <p><b>Target Pest:</b> {{ record['Target Pest'] }}</p>
-              <p><b>Pest Taxonomy ID:</b> {{ record['Pest Taxonomy ID'] }}</p>
-              <p><b>Target Pest Order:</b> {{ record['Target Pest Order'] }}</p>
-              <p><b>Pest Developmental Stage:</b> {{ record['Pest Developmental Stage'] }}</p>
-              <p><b>RNA Length (nt):</b> {{ record['RNA Length (nt)'] }}</p>
-              <p>
-                <b>RNA Sequence:</b>
-                <code>{{ record['RNA Sequence'] }}</code>
-              </p>
-              <p><b>DNA length (bp):</b> {{ record['DNA length（bp）'] }}</p>
-              <p>
-                <b>DNA Sequence:</b>
-                <code>{{ record['DNA Sequence'] }}</code>
-              </p>
-              <p><b>RNA Type:</b> {{ record['RNA Type'] }}</p>
-              <p><b>RNA Production Method:</b> {{ record['RNA Production Method'] }}</p>
-              <p><b>Target Gene Name:</b> {{ record['Target Gene Name'] }}</p>
-              <p><b>Gene Function:</b> {{ record['Gene Function'] }}</p>
-              <p><b>Gene ID:</b> {{ record['Gene ID'] }}</p>
-              <p>
-                <b>Mechanism of Pesticide / Biochemical Process:</b>
-                {{ record['Mechanism of Pesticide/Biochemical Process'] }}
-              </p>
-              <p><b>Delivery Material:</b> {{ record['Delivery Material'] }}</p>
-              <p><b>Experimental Plants:</b> {{ record['Experimental Plants'] }}</p>
-              <p><b>Experimental Environment:</b> {{ record['Experimental Environment'] }}</p>
-              <p><b>Optimal Concentration:</b> {{ record['Optimal Concentration'] }}</p>
-              <p><b>LC50:</b> {{ record['LC50'] }}</p>
-              <p><b>Time to Onset:</b> {{ record['Time to Onset'] }}</p>
-              <p><b>Duration of Efficacy:</b> {{ record['Duration of Efficacy'] }}</p>
-              <p>
-                <b>Stability:</b>
-                {{ record['Stability（Chemical Stability、Environmental Stability、Half-Life）'] }}
-              </p>
-              <p><b>Effect:</b> {{ record['Effect'] }}</p>
-              <p>
-                <b>Efficiency（Low：＜40%；Medium：40%-80%；High：＞80%）:</b>
-                {{ record['Efficiency（Low：＜40%；Medium：40%-80%；High：＞80%）'] }}
-              </p>
-              <p><b>Reference PMID:</b> {{ record['Reference PMID'] }}</p>
-              <p>
-                <b>Notes (Supplementary Information):</b>
-                {{ record['Notes（Supplementary Information）'] }}
-              </p> -->
-              <!-- 新增：跳转到新窗口查看所有字段 -->
-              <el-button type="primary" size="small" @click="openDetailPage(record)">
-                Details
-              </el-button>
-            </div>
+          <!-- 保留 slot 以渲染“+”图标，但不显示实际展开内容 -->
+          <template #expandedRowRender>
+            <div style="display: none"></div>
           </template>
         </s-table>
       </s-table-provider>
@@ -131,8 +81,8 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, ref, onMounted, computed } from 'vue'
-import { ElSelect, ElOption, ElButton } from 'element-plus'
+import { defineComponent, ref, onMounted, computed, watch } from 'vue'
+import { ElSelect, ElOption } from 'element-plus'
 import { useTableData } from '../../utils/useTableData.js'
 import VueEasyLightbox from 'vue-easy-lightbox'
 import { processCSVData } from '../../utils/processCSVData.js'
@@ -148,10 +98,10 @@ export default defineComponent({
   components: {
     ElSelect,
     ElOption,
-    ElButton,
     VueEasyLightbox,
   },
   setup() {
+    // 从 CSV 加载数据
     const {
       searchText,
       filteredDataSource: originalFilteredDataSource,
@@ -165,22 +115,39 @@ export default defineComponent({
       ]),
     )
 
+    // 各种响应式状态
     const tableSize = ref('default')
     const loading = ref(false)
     const sortedDataSource = ref<DataType[]>([])
     const visible = ref(false)
     const lightboxImgs = ref<string[]>([])
     const lightboxKey = ref(0)
+    // 记录当前哪些行展开
+    const expandedRowKeys = ref<string[]>([])
 
+    // 点击图片打开 Lightbox
+    const showLightbox = (pictureid: string) => {
+      const imgUrl = `https://minio.lumoxuan.cn/ensure/picture/${pictureid}.png`
+      lightboxImgs.value = [imgUrl]
+      lightboxKey.value += 1
+      visible.value = true
+    }
+    const hideLightbox = () => {
+      visible.value = false
+    }
+
+    // 组件挂载后加载数据
     onMounted(async () => {
       await loadData()
       sortedDataSource.value = originalFilteredDataSource.value
     })
 
+    // 计算哪些列要显示
     const displayedColumns = computed(() =>
       allColumns.filter((c) => selectedColumns.value.includes(c.key as string)),
     )
 
+    // 计算过滤后的数据
     const filteredDataSource = computed(() => {
       if (!searchText.value) return sortedDataSource.value
       return sortedDataSource.value.filter((record) => {
@@ -195,8 +162,9 @@ export default defineComponent({
       })
     })
 
+    // 排序回调
     function onSorterChange(params: any) {
-      let sorter = Array.isArray(params) ? params[0] : params
+      const sorter = Array.isArray(params) ? params[0] : params
       loading.value = true
       setTimeout(() => {
         sortedDataSource.value = sortData(originalFilteredDataSource.value, sorter)
@@ -204,18 +172,23 @@ export default defineComponent({
       }, 300)
     }
 
-    function showLightbox(pictureid: string) {
-      const imgUrl = `https://minio.lumoxuan.cn/ensure/picture/${pictureid}.png`
-      lightboxImgs.value = [imgUrl]
-      lightboxKey.value += 1
-      visible.value = true
-    }
-    function hideLightbox() {
-      visible.value = false
-    }
+    // 侦听 expandedRowKeys，只要用户点击 “+” 就会有值
+    watch(expandedRowKeys, (keys) => {
+      if (keys.length) {
+        // 找到对应的行数据
+        const record = originalFilteredDataSource.value.find((r) => r.key === keys[0])
+        if (record) {
+          console.log('watch expandedRowKeys, open detail for', record)
+          openDetailPage(record)
+        }
+        // 立刻收起
+        expandedRowKeys.value = []
+      }
+    })
 
-    // —— 新增：在新窗口展示完整 record —— //
+    // 在新标签页打开详情
     function openDetailPage(record: DataType) {
+      console.log('openDetailPage record=', record)
       const rows = Object.entries(record)
         .map(([key, val]) => `<p><strong>${key}:</strong> ${val != null ? val : ''}</p>`)
         .join('\n')
@@ -238,6 +211,7 @@ export default defineComponent({
       const blob = new Blob([html], { type: 'text/html' })
       const url = URL.createObjectURL(blob)
       window.open(url, '_blank')
+      // 1 分钟后释放 URL
       setTimeout(() => URL.revokeObjectURL(url), 60_000)
     }
 
@@ -250,13 +224,14 @@ export default defineComponent({
       searchColumn,
       locale,
       selectedColumns,
-      loading, // ← 新增这一行
+      loading,
       visible,
       lightboxImgs,
       lightboxKey,
       showLightbox,
       hideLightbox,
       onSorterChange,
+      expandedRowKeys, // v-model:expandedRowKeys 绑定
       pagination,
       openDetailPage,
     }

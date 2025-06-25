@@ -27,12 +27,30 @@ export function useTableData(csvUrl, transformer) {
     try {
       const response = await fetch(csvUrl)
       const csvText = await response.text()
+
+      // —— 新增：用来统计每个“干净”列头出现次数 —— //
+      const headerCount = {}
+
       Papa.parse(csvText, {
         header: true,
         delimiter: ',',
         skipEmptyLines: true,
         dynamicTyping: true,
+
+        // —— 新增：在这里清理 BOM、trim 并检测重复 —— //
+        transformHeader(rawHeader) {
+          const clean = rawHeader.replace(/^\uFEFF/, '').trim()
+          headerCount[clean] = (headerCount[clean] || 0) + 1
+          if (headerCount[clean] > 1) {
+            console.warn(`[useTableData] 重复列头 "${clean}" 第 ${headerCount[clean]} 次出现`)
+          }
+          return clean
+        },
+
         complete: (results) => {
+          // —— 新增：打印最终使用的所有列名 —— //
+          console.log('[useTableData] 最终列头：', results.meta.fields)
+
           // 原始解析结果
           let rows = results.data
           // 如果提供了 transformer 函数，则对 rows 进行二次加工
@@ -44,6 +62,10 @@ export function useTableData(csvUrl, transformer) {
             key: index.toString(),
             ...item,
           }))
+          isLoading.value = false
+        },
+        error(err) {
+          error.value = err
           isLoading.value = false
         },
       })

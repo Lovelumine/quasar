@@ -58,60 +58,9 @@
         >
           <template #expandedRowRender="{ record }">
             <div class="expanded-row">
-              <p>
-                <b>Plant Name:</b> <em>{{ record['Plant Name'] }}</em>
-              </p>
-              <p><b>Plant Taxonomy ID:</b> {{ record['Plant Taxonomy ID'] }}</p>
-              <p><b>Transgenic Site:</b> {{ record['Transgenic  Site'] }}</p>
-              <p><b>Transformation Method:</b> {{ record['Transformation Method'] }}</p>
-              <p><b>Expression System:</b> {{ record['Expression System'] }}</p>
-              <p><b>Vector:</b> {{ record['Vector'] }}</p>
-              <p><b>Target Pest Name:</b> {{ record['Target Pest Name'] }}</p>
-              <p><b>Pest Taxonomy ID:</b> {{ record['Pest Taxonomy ID'] }}</p>
-              <p><b>Target Pest Order:</b> {{ record['Target Pest Order'] }}</p>
-              <p><b>Pest Developmental Stage:</b> {{ record['Pest Developmental Stage'] }}</p>
-              <p><b>RNA Length (nt):</b> {{ record['RNA Length (nt)'] }}</p>
-              <p>
-                <b>RNA Sequence:</b> <code>{{ record['RNA Sequence'] }}</code>
-              </p>
-              <p><b>DNA length (bp):</b> {{ record['DNA length（bp）'] }}</p>
-              <p>
-                <b>DNA Sequence:</b> <code>{{ record['DNA Sequence'] }}</code>
-              </p>
-              <p><b>RNA Type:</b> {{ record['RNA Type'] }}</p>
-              <p><b>RNA Production Method:</b> {{ record['RNA Production Method'] }}</p>
-              <p><b>Target Gene Name:</b> {{ record['Target Gene Name'] }}</p>
-              <p><b>Gene Function:</b> {{ record['Gene Function'] }}</p>
-              <p><b>Gene ID:</b> {{ record['Gene ID'] }}</p>
-              <p>
-                <b>Mechanism of Pesticide / Biochemical Process:</b>
-                {{ record['Mechanism of Pesticide/Biochemical Process'] }}
-              </p>
-              <p><b>Experimental Environment:</b> {{ record['Experimental Environment'] }}</p>
-              <p><b>Optimal Concentration:</b> {{ record['Optimal Concentration'] }}</p>
-              <p><b>LC50:</b> {{ record['LC50'] }}</p>
-              <p><b>Time to Onset:</b> {{ record['Time to Onset'] }}</p>
-              <p><b>Duration of Efficacy:</b> {{ record['Duration of Efficacy'] }}</p>
-              <p>
-                <b>Stability:</b>
-                {{ record['Stability（Chemical Stability、Environmental Stability、Half-Life）'] }}
-              </p>
-              <p><b>Effect:</b> {{ record['Effect'] }}</p>
-              <p>
-                <b>Efficiency:</b>
-                {{ record['Efficiency（Low：＜40%；Medium：40%-80%；High：＞80%）'] }}
-              </p>
-              <p>
-                <b>Safety Profile / Off-target Probability:</b>
-                {{ record['Safety Profile/Off-target Probability'] }}
-              </p>
-              <p><b>Non-target Species:</b> {{ record['Non-target Species'] }}</p>
-              <p><b>Reference PMID:</b> {{ record['Reference PMID'] }}</p>
-              <p>
-                <b>Notes (Supplementary Information):</b>
-                {{ record['Notes（Supplementary Information）'] }}
-              </p>
-              <p><b>Primer information:</b> {{ record['Primer information'] }}</p>
+              <el-button type="primary" size="small" @click="openDetailPage(record)">
+                Details
+              </el-button>
             </div>
           </template>
         </s-table>
@@ -129,11 +78,9 @@
 
 <script lang="tsx">
 import { defineComponent, ref, onMounted, computed } from 'vue'
-import { ElSelect, ElOption } from 'element-plus'
+import { ElSelect, ElOption, ElButton } from 'element-plus'
 import { useTableData } from '../../utils/useTableData.js'
 import VueEasyLightbox from 'vue-easy-lightbox'
-import { highlightMutation } from '../../utils/highlightMutation.js'
-import { getTagType } from '../../utils/tag.js'
 import { processCSVData } from '../../utils/processCSVData.js'
 import { allColumns, selectedColumns, DataType } from './Higscolumns.js'
 import { sortData } from '../../utils/sort.js'
@@ -148,6 +95,7 @@ export default defineComponent({
     // ElImage,
     ElSelect,
     ElOption,
+    ElButton,
     VueEasyLightbox,
   },
   setup() {
@@ -166,18 +114,16 @@ export default defineComponent({
 
     const tableSize = ref('default')
     const loading = ref(false)
-    const dataSource = ref<DataType[]>([])
     const sortedDataSource = ref<DataType[]>([])
-
-    onMounted(async () => {
-      await loadData()
-      dataSource.value = originalFilteredDataSource.value
-      sortedDataSource.value = originalFilteredDataSource.value
-    })
-
     const visible = ref(false)
     const lightboxImgs = ref<string[]>([])
     const lightboxKey = ref(0)
+
+
+    onMounted(async () => {
+      await loadData()
+      sortedDataSource.value = originalFilteredDataSource.value
+    })
 
     const showLightbox = (pictureid: string) => {
       const imgUrl = `https://minio.lumoxuan.cn/ensure/picture/${pictureid}.png`
@@ -193,10 +139,6 @@ export default defineComponent({
     const displayedColumns = computed(() =>
       allColumns.filter((column) => selectedColumns.value.includes(column.key as string)),
     )
-
-    const getPmidList = (pmidString) => {
-      return String(pmidString).split('、')
-    }
 
     const onSorterChange = (params: any) => {
       let sorter: { field?: string; order?: 'ascend' | 'descend' } = {}
@@ -230,6 +172,63 @@ export default defineComponent({
       })
     })
 
+    function openDetailPage(record: DataType) {
+      const groups = [
+        {
+          title: 'Transgenic Plant',
+          {}
+        }
+      ]
+      const rows = Object.entries(record)
+        .map(([key, val]) => `<tr>
+          <td class="label">${key}:</td>
+          <td>${val != null ? val : ''}`)
+        .join('\n')
+      const html = `
+        <!doctype html>
+        <html><head>
+          <meta charset="utf-8">
+          <title>Detail Information</title>
+          <style>
+            body { font-family: Arial, sans-serif; padding: 20px; }
+            table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            }
+            td {
+            padding: 8px;
+            border:1px solid #eee;
+            vertical-align: top;
+            }
+            .label{
+            font-weight:bold;
+            width:30%;
+            background-color:#f9f9f9;
+            }
+            .highlight{
+            background-color:#fffacd;
+            font-weight:bold;
+            }
+
+          </style>
+        </head>
+        <body>
+          <h1>Details: ${record['Virus'] || ''}</h1>
+          <table>
+            <tbody>
+
+            </tbody>
+          <table>
+        </body>
+        </html>`
+      const blob = new Blob([html], { type: 'text/html' })
+      const url = URL.createObjectURL(blob)
+      window.open(url, '_blank')
+      setTimeout(() => URL.revokeObjectURL(url), 60_000)
+    }
+
+
     return {
       allColumns,
       displayedColumns,
@@ -239,17 +238,15 @@ export default defineComponent({
       searchColumn,
       locale,
       selectedColumns,
-      highlightMutation,
+      loading, // ← 新增这一行
       visible,
-      lightboxKey,
       lightboxImgs,
+      lightboxKey,
       showLightbox,
       hideLightbox,
-      getTagType, // 获取标签类型
       onSorterChange,
-      getPmidList, // 添加getPmidList方法
-      loading,
-      pagination, // 分页配置
+      pagination,
+      openDetailPage,
     }
   },
 })

@@ -5,12 +5,12 @@ export type DataType = { [key: string]: string }
 
 export const allColumns: STableColumnsType<DataType> = [
   {
-      title:'ID',
-      dataIndex: 'ID',
-      key:'ID',
-      width:200,
-      ellipsis:true,
-      resizable:true,
+    title: 'ID',
+    dataIndex: 'ID',
+    key: 'ID',
+    width: 200,
+    ellipsis: true,
+    resizable: true,
   },
 
   {
@@ -281,4 +281,3 @@ export const selectedColumns = ref<string[]>([
   'Effect',
   'Reference PMID',
 ])
-
