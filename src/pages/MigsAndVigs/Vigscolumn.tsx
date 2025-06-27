@@ -4,7 +4,7 @@ import { ref } from 'vue'
 export type DataType = { [key: string]: string }
 
 export const allColumns: STableColumnsType<DataType> = [
-    {
+  {
     title: 'Virus',
     dataIndex: 'Virus',
     key: 'Virus',
@@ -35,6 +35,18 @@ export const allColumns: STableColumnsType<DataType> = [
     width: 200,
     ellipsis: true,
     resizable: true,
+    filter: {
+      type: 'multiple',
+      list: [
+        { text: 'Myzus persicae', value: 'Myzus persicae' },
+        { text: 'F. culmorum', value: 'F. culmorum' },
+        { text: 'Myzus persicae (Sulzer)', value: 'Myzus persicae (Sulzer)' },
+        { text: 'Ostrinia furnacalis', value: 'Ostrinia furnacalis' },
+        { text: 'Helicoverpa armigera', value: 'Helicoverpa armigera' },
+        { text: 'Apolygus lucorum', value: 'Apolygus lucorum' },
+      ],
+      onFilter: (value, record) => value.includes(record['Target Pest']),
+    },
   },
   {
     title: 'Pest Taxonomy ID',
