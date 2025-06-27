@@ -1,9 +1,20 @@
 <template>
   <q-page class="home-page">
     <!-- 搜索区域 -->
-    <section class="search-section bg-light q-py-lg">
+    <!-- <section class="search-section bg-light q-py-lg">
       <div class="container">
-        <div class="search-box bg-white rounded-pill shadow-5 row">
+
+        <div class="search-box bg-white rounded-pill shadow-5 row"> -->
+          <!-- 添加下拉筛选框 -->
+          <!-- <q-select
+            class="col-auto"
+            v-model="searchField"
+            :options="searchOptions"
+            dense
+            borderless
+            style="min-width: 100px;"
+            popup-content-class="search-select-popup"
+          />
           <q-input
             class="col-grow"
             borderless
@@ -15,7 +26,7 @@
             label="Search"
             unelevated
             size="lg"
-            style="border-radius: 0 50px 50px 0"
+            style="border-radius: 0 70px 70px 0"
           />
         </div>
         <div class="search-examples text-center q-mt-md">
@@ -29,7 +40,86 @@
           </p>
         </div>
       </div>
+    </section> -->
+
+    <!-- 搜索区域 -->
+    <section class="search-section bg-light q-py-lg">
+      <div class="container">
+        <div class="search-box bg-white rounded-pill shadow-5 row">
+          <!-- 添加下拉筛选框 -->
+          <q-select
+            class="col-auto"
+            v-model="searchField"
+            :options="searchOptions"
+            dense
+            borderless
+            style="min-width: 100px;"
+            popup-content-class="search-select-popup"
+          />
+          <q-input
+            class="col-grow"
+            v-model="searchKeyword"
+            borderless
+            placeholder="Search by pest name, target gene, mechanism, or crop..."
+            input-class="text-body1"
+            @keyup.enter="performSearch"
+          />
+          <q-btn
+            class="bg-primary text-white"
+            label="Search"
+            unelevated
+            size="lg"
+            style="border-radius: 0 70px 70px 0"
+            @click="performSearch"
+          />
+        </div>
+        <div class="search-examples text-center q-mt-md">
+          <p>
+            <span class="example-label text-weight-bold">Examples:</span>
+            <span class="example-bold">Lepidoptera</span>,
+            <span class="example-italic">Helicoverpa armigera</span>,
+            <span class="example-italic">Zea mays</span>,
+            <span class="example-italic">V-ATPase</span>,
+            <span class="example-italic">chitinase</span>
+          </p>
+        </div>
+
+        <!-- 搜索结果展示 -->
+        <div v-if="searchResults.length > 0" class="search-results bg-white q-mt-lg rounded-borders shadow-3">
+          <div class="q-pa-md">
+            <div class="text-h6 text-primary q-mb-md">
+              Search Results ({{ searchResults.length }})
+              <q-btn
+                label="Clear"
+                flat
+                dense
+                color="negative"
+                class="float-right"
+                @click="clearSearch"
+              />
+            </div>
+            <q-table
+              :rows="searchResults"
+              :columns="resultColumns"
+              row-key="id"
+              dense
+              flat
+              separator="cell"
+              :rows-per-page-options="[5, 10, 20]"
+            >
+              <template v-slot:body-cell-type="props">
+                <q-td :props="props">
+                  <q-badge :color="typeColors[props.row.type]" class="q-px-sm q-py-xs">
+                    {{ props.row.type }}
+                  </q-badge>
+                </q-td>
+              </template>
+            </q-table>
+          </div>
+        </div>
+      </div>
     </section>
+
 
     <!-- 主视觉区域 -->
     <section class="hero">
@@ -66,9 +156,13 @@
     <section class="rna-intro bg-white q-py-xl">
       <div class="container">
         <div class="rna-container">
-          <div class="img">
-            
-          </div>
+                <div class="image-container">
+                  <q-img
+                    :src="imagePath"
+                    alt="图片描述"
+                    style="max-width: 95%"
+                  />
+                </div>
           <div class="rna-card bg-yellow-1 shadow-3 rounded-borders q-pa-md q-mb-lg">
             <div class="rna-title q-mt-sm q-mb-md">
               <h2 class="text-h4 q-mt-sm text-center ">RNA Pesticide</h2>
@@ -429,9 +523,128 @@
 </template>
 
 <script>
+import { ref, onMounted } from 'vue';
+import Papa from 'papaparse';
+
 export default {
   name: 'HomePage',
   setup() {
+
+    //搜索框
+    // 搜索相关变量
+    const searchField = ref('All Fields');
+    const searchKeyword = ref('');
+    const searchResults = ref([]);
+    const allData = ref([]);
+    const isLoading = ref(false);
+
+    // 搜索选项
+    const searchOptions = [
+      'All Fields', 'Pest Name', 'Target Gene', 'Mechanism', 'Crop', 'Type'
+    ];
+
+    // 搜索结果表格列定义
+    const resultColumns = [
+      { name: 'type', label: 'Type', field: 'type', align: 'left', sortable: true },
+      { name: 'pest', label: 'Pest', field: 'pest', align: 'left', sortable: true },
+      { name: 'target_gene', label: 'Target Gene', field: 'target_gene', align: 'left' },
+      { name: 'mechanism', label: 'Mechanism', field: 'mechanism', align: 'left' },
+      { name: 'crop', label: 'Crop', field: 'crop', align: 'left' },
+      { name: 'efficacy', label: 'Efficacy', field: 'efficacy', align: 'center' }
+    ];
+
+    // 类型颜色映射
+    const typeColors = {
+      HIGS: 'blue',
+      MIGS: 'green',
+      SIGS: 'orange',
+      VIGS: 'purple',
+      PTO: 'red'
+    };
+
+    // 加载CSV数据
+    const loadCSVData = async () => {
+      isLoading.value = true;
+      const files = ['HIGS', 'MIGS', 'SIGS', 'VIGS', 'PTO'];
+      const promises = files.map(file => {
+        return new Promise((resolve) => {
+          // 注意：文件路径需要根据实际项目结构调整
+          Papa.parse(`/data/${file}.csv`, {
+            download: true,
+            header: true,
+            skipEmptyLines: true,
+            complete: (results) => {
+              // 添加类型标识并规范化数据
+              const dataWithType = results.data.map(item => ({
+                ...item,
+                type: file,
+                id: `${file}-${Math.random().toString(36).substr(2, 9)}`
+              }));
+              resolve(dataWithType);
+            },
+            error: (error) => {
+              console.error(`Error loading ${file}.csv:`, error);
+              resolve([]);
+            }
+          });
+        });
+      });
+
+      try {
+        const results = await Promise.all(promises);
+        allData.value = results.flat();
+      } catch (error) {
+        console.error('Error loading data:', error);
+      } finally {
+        isLoading.value = false;
+      }
+    };
+
+    // 执行搜索
+    const performSearch = () => {
+      if (!searchKeyword.value.trim()) {
+        return;
+      }
+
+      const keyword = searchKeyword.value.toLowerCase().trim();
+
+      searchResults.value = allData.value.filter(item => {
+        // 根据选择的搜索字段进行过滤
+        switch (searchField.value) {
+          case 'Target Pest Name':
+            return item.pest?.toLowerCase().includes(keyword);
+          case 'Target Gene Name':
+            return item.target_gene?.toLowerCase().includes(keyword);
+          case 'RNA Sequence':
+            return item.mechanism?.toLowerCase().includes(keyword);
+          case 'Target Pest Order':
+            return item.crop?.toLowerCase().includes(keyword);
+          case 'Plant Name':
+            return item.type?.toLowerCase().includes(keyword);
+          default: // 'All Fields'
+            return (
+              item.pest?.toLowerCase().includes(keyword) ||
+              item.target_gene?.toLowerCase().includes(keyword) ||
+              item.mechanism?.toLowerCase().includes(keyword) ||
+              item.crop?.toLowerCase().includes(keyword) ||
+              item.type?.toLowerCase().includes(keyword)
+            );
+        }
+      });
+    };
+
+    // 清除搜索结果
+    const clearSearch = () => {
+      searchResults.value = [];
+      searchKeyword.value = '';
+    };
+
+    // 组件挂载时加载数据
+    onMounted(() => {
+      loadCSVData();
+    });
+
+
     // 导航链接
     const navLinks = ['Home', 'SIGS', 'HIGS', 'VIGS', 'MIGS', 'Other', 'About', 'Help']
 
@@ -462,6 +675,11 @@ export default {
         description: 'Scientific publications',
       },
     ]
+
+     const imagePath = ['/picture/home.png'
+
+        ]
+
 
     // RNA特性
     const rnaFeatures = [
@@ -683,6 +901,14 @@ export default {
     const footerLinks = ['Home', 'User Guide', 'PubMed', 'CABI', 'Web of Science', 'About Us']
 
     return {
+       searchField,
+      searchKeyword,
+      searchOptions,
+      searchResults,
+      resultColumns,
+      typeColors,
+      performSearch,
+      clearSearch,
       navLinks,
       stats,
       rnaFeatures,
@@ -691,6 +917,7 @@ export default {
       species,
       visualizations,
       publications,
+      imagePath,
       industry,
       features,
       footerLinks,
@@ -723,9 +950,24 @@ export default {
 .search-section {
   padding: 2.5rem 0;
 }
+.search-results {
+  max-height: 600px;
+  overflow: auto;
+  border: 1px solid #e0e0e0;
 
+  .q-table {
+    th {
+      font-weight: bold;
+      background-color: #f5f7fa;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+  }
+}
 .search-box {
-  max-width: 700px;
+  max-width: 900px;
   margin: 0 auto;
   background: white;
   border-radius: 50px;
@@ -783,7 +1025,11 @@ export default {
     box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15) !important;
   }
 }
-
+.image-container {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
 
 // 对比表格
 .comparison-table {

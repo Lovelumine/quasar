@@ -1,86 +1,13 @@
 <template>
   <div class="site--main">
     <h2>HIGS</h2>
-    <!-- 顶部行包含尺寸调整、搜索框和列选择 -->
-    <div class="top-controls">
-      <!-- 搜索框 -->
-      <div class="search-box">
-        <input v-model="searchText" placeholder="Enter search content" class="search-input" />
-        <el-select
-          v-model="searchColumn"
-          placeholder="Select column to search"
-          class="search-column-select"
-        >
-          <el-option :key="'all'" :label="'All columns'" :value="''" />
-          <el-option v-for="column in allColumns" :key="column.key" :value="column.dataIndex" />
-        </el-select>
-      </div>
-      <!-- 调整尺寸 -->
-      <div class="size-controls" style="margin-bottom: 10px">
-        <el-radio-group v-model="tableSize">
-          <el-radio-button value="small">Small Size</el-radio-button>
-          <el-radio-button value="default">Default Size</el-radio-button>
-          <el-radio-button value="large">Large Size</el-radio-button>
-        </el-radio-group>
-      </div>
-      <!-- 选择显示列 -->
-      <div class="column-controls" style="margin-bottom: 10px">
-        <el-select
-          v-model="selectedColumns"
-          multiple
-          placeholder="Select columns to display"
-          collapse-tags
-          class="column-select"
-        >
-          <el-option
-            v-for="column in allColumns"
-            :key="column.key"
-            :label="column.title as string"
-            :value="column.key"
-          />
-        </el-select>
-      </div>
-    </div>
-    <!-- 表格组件 -->
-    <div class="custom-tag-styles">
-      <s-table-provider :hover="true" :locale="locale">
-        <s-table
-          :columns="displayedColumns"
-          :data-source="filteredDataSource"
-          :row-key="(record) => record.key"
-          :stripe="true"
-          :show-sorter-tooltip="true"
-          :size="tableSize"
-          :expand-row-by-click="true"
-          @sorter-change="onSorterChange"
-          :loading="loading"
-          :pagination="pagination"
-        >
-          <template #expandedRowRender="{ record }">
-            <div class="expanded-row">
-              <el-button type="primary" size="small" @click="openDetailPage(record)">
-                Details
-              </el-button>
-            </div>
-          </template>
-        </s-table>
-      </s-table-provider>
-      <vue-easy-lightbox
-        :key="lightboxKey"
-        :visible="visible"
-        :imgs="lightboxImgs"
-        :index="0"
-        @hide="hideLightbox"
-      />
-    </div>
-  </div>
 
-  <!-- 新增HIGS介绍卡片 -->
+      <!-- 新增HIGS介绍卡片 -->
    <div class="container">
       <div class="q-pa-md row items-start q-gutter-md">
         <q-card class="card" flat bordered>
           <q-card-section>
-              <div class="text-h4 q-ma-sm">HIGS</div>
+              <div class="text-h4 text-green q-ma-sm">HIGS Production</div>
           <q-separator/>
           </q-card-section>
 
@@ -92,17 +19,119 @@
             </q-card-secion>
 
 
-            <q-card-section class="col-6 bg-grey-1">
+            <q-card-section class="col-6 bg-white-1">
             <q-img
               class="rounded-borders"
               src="../../../public/picture/HIGS.png"
             />
-            <div class="flex justify-center text-grey"><em>Figure1:HIGS application process </em></div>
+            <div class="text-substitle1 flex justify-center text-grey"><em>Figure1:HIGS application process </em></div>
             </q-card-section>
           </q-card-section>
       </q-card>
     </div>
    </div>
+
+
+    <!-- 表格和搜索部分 -->
+    <div class="container">
+    <div class="q-pa-md row items-start q-gutter-md">
+    <q-card class="card" flat bordered>
+      <!-- 标题 -->
+      <q-card-section>
+          <div class="text-h4 text-green q-ma-sm">Data Search</div>
+      </q-card-section>
+
+      <q-separator/>
+
+      <!-- 搜索框 -->
+      <q-card-section class="bg-grey-1">
+      <div class="search-box">
+        <el-select
+          v-model="searchColumn"
+          placeholder="Select column to search"
+          class="search-column-select"
+        >
+          <el-option :key="'all'" :label="'All columns'" :value="''" />
+          <el-option v-for="column in allColumns" :key="column.key" :value="column.dataIndex" />
+        </el-select>
+        <input v-model="searchText" placeholder="Enter search content" class="search-input" />
+      </div>
+      </q-card-section>
+
+      <!-- 顶部工具栏 -->
+      <q-card-section>
+      <div class="top-controls">
+        <!-- 调整尺寸 -->
+        <div class="size-controls" style="margin-bottom: 10px">
+          <el-radio-group v-model="tableSize">
+            <el-radio-button value="small">Small Size</el-radio-button>
+            <el-radio-button value="default">Default Size</el-radio-button>
+            <el-radio-button value="large">Large Size</el-radio-button>
+          </el-radio-group>
+        </div>
+        <!-- 选择显示列 -->
+        <div class="column-controls" style="margin-bottom: 10px">
+          <el-select
+            v-model="selectedColumns"
+            multiple
+            placeholder="Select columns to display"
+            collapse-tags
+            class="column-select"
+          >
+            <el-option
+              v-for="column in allColumns"
+              :key="column.key"
+              :label="column.title as string"
+              :value="column.key"
+            />
+          </el-select>
+        </div>
+      </div>
+      </q-card-section>
+      <!-- 表格正文 -->
+      <q-card-section>
+      <div class="custom-tag-styles">
+        <s-table-provider :hover="true" :locale="locale">
+          <s-table
+            :columns="displayedColumns"
+            :data-source="filteredDataSource"
+            :row-key="(record) => record.key"
+            :stripe="true"
+            :show-sorter-tooltip="true"
+            :size="tableSize"
+            :expand-row-by-click="true"
+            @sorter-change="onSorterChange"
+            :loading="loading"
+            :pagination="pagination"
+          >
+            <template #expandedRowRender="{ record }">
+              <div class="expanded-row">
+                <el-button type="primary" size="small" @click="openDetailPage(record)">
+                  Details
+                </el-button>
+              </div>
+            </template>
+          </s-table>
+        </s-table-provider>
+        <vue-easy-lightbox
+          :key="lightboxKey"
+          :visible="visible"
+          :imgs="lightboxImgs"
+          :index="0"
+          @hide="hideLightbox"
+        />
+      </div>
+      </q-card-section>
+      <!-- 底部工具栏 -->
+    </q-card>
+    </div>
+    </div>
+
+
+
+  </div>
+
+
 
 <!-- 新增“Commercialization Case” -->
     <div class="container">
@@ -121,7 +150,7 @@
             </q-card-secion>
 
 
-            <q-card-section class="col-6 bg-grey-1">
+            <q-card-section class="col-6 bg-white-1">
             <q-img
               class="rounded-borders"
               src="../../../public/picture/HIGS.png"
@@ -419,8 +448,10 @@ export default defineComponent({
 }
 
 .search-box {
-  flex-grow: 1;
-  margin-right: 10px;
+  flex-grow: 7;
+  width:90%;
+  margin:0 auto;
+  align-items: center;
 }
 
 .size-controls,
@@ -480,5 +511,11 @@ export default defineComponent({
   border: 1px solid #e0e0e0;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.PictureContainer{
+  width:80%;
+  height:80%;
+  margin:0 auto
 }
 </style>
